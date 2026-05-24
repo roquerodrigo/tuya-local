@@ -1,0 +1,36 @@
+name: Motor WI-FI EMTECO
+products:
+  - id: xyakonle1azq2xgn
+    manufacturer: EMTECO
+    model: Motor WI-FI EMTECO
+entities:
+  - entity: cover
+    class: curtain
+    dps:
+      - id: 1
+        name: control
+        type: string
+        mapping:
+          - conditions:
+              - dps_val: ["open", "close", "stop", "continue"]
+                mapping:
+                  - dps_val: open
+                    value: open
+                  - dps_val: close
+                    value: close
+                  - dps_val: stop
+                    value: stop
+      - id: 3
+        name: open
+        type: string
+        mapping:
+          - conditions:
+              - dps_val: ["opening", "closing"]
+                default: true
+                mapping:
+                  - dps_val: opening
+                    value: true
+                  - dps_val: closing
+                    value: false
+                  - dps_val: null
+                    value: null

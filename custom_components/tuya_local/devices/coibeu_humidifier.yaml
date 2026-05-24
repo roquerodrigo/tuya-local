@@ -1,0 +1,23 @@
+name: Umidificador Coibeu
+products:
+  - id: 8fhyolhknsiqhbic
+    manufacturer: Coibeu
+    model: WKJS-4L
+entities:
+  - entity: fan
+    name: Umidificador
+    dps:
+      - id: 1
+        name: switch
+        type: boolean
+
+      - id: 23
+        name: speed
+        type: string
+        mapping:
+          - dps_val: level_1
+            value: 33
+          - dps_val: level_2
+            value: 67
+          - dps_val: level_3
+            value: 100
