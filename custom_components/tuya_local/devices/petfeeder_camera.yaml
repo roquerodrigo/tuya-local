@@ -1,0 +1,45 @@
+name: Alimentador com câmera
+products:
+  - id: z903y3w6fvxpznab
+    name: Pet feeder with camera
+entities:
+  - entity: button
+    name: Alimentar
+    icon: "mdi:food-steak"
+    dps:
+      - id: 3
+        name: button
+        type: integer
+        optional: true
+        mapping:
+          - dps_val: 1
+            value: true
+  - entity: sensor
+    name: Estado
+    class: enum
+    icon: "mdi:information-outline"
+    dps:
+      - id: 4
+        name: sensor
+        type: string
+        mapping:
+          - dps_val: standby
+            value: Em espera
+          - dps_val: feeding
+            value: Alimentando
+          - dps_val: done
+            value: Concluído
+  - entity: sensor
+    class: battery
+    dps:
+      - id: 10
+        name: sensor
+        type: integer
+        unit: "%"
+  - entity: binary_sensor
+    class: problem
+    category: diagnostic
+    dps:
+      - id: 19
+        name: sensor
+        type: bitfield
