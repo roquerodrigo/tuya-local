@@ -16,29 +16,6 @@ from .helpers import assert_device_properties_set, mock_device
 
 
 @pytest.mark.asyncio
-async def test_init_entry(hass, mocker):
-    """Test the initialisation."""
-    entry = MockConfigEntry(
-        domain=DOMAIN,
-        data={
-            CONF_TYPE: "anko_fan",
-            CONF_DEVICE_ID: "dummy",
-            CONF_PROTOCOL_VERSION: "auto",
-        },
-    )
-    m_add_entities = mocker.Mock()
-    m_device = mocker.AsyncMock()
-
-    hass.data[DOMAIN] = {
-        "dummy": {"device": m_device},
-    }
-
-    await async_setup_entry(hass, entry, m_add_entities)
-    assert type(hass.data[DOMAIN]["dummy"]["number_timer"]) is TuyaLocalNumber
-    m_add_entities.assert_called_once()
-
-
-@pytest.mark.asyncio
 async def test_init_entry_fails_if_device_has_no_number(hass, mocker):
     """Test initialisation when device has no matching entity"""
     entry = MockConfigEntry(

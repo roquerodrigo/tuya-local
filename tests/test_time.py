@@ -20,7 +20,7 @@ async def test_init_entry(hass):
     entry = MockConfigEntry(
         domain=DOMAIN,
         data={
-            CONF_TYPE: "mustool_mt15mt29_airbox",
+            CONF_TYPE: "rgbcw_lightbulb",
             CONF_DEVICE_ID: "dummy",
             CONF_PROTOCOL_VERSION: "auto",
         },
@@ -33,7 +33,7 @@ async def test_init_entry(hass):
     }
 
     await async_setup_entry(hass, entry, m_add_entities)
-    assert type(hass.data[DOMAIN]["dummy"]["time_alarm_1"]) is TuyaLocalTime
+    assert type(hass.data[DOMAIN]["dummy"]["time_timer"]) is TuyaLocalTime
     m_add_entities.assert_called_once()
 
 

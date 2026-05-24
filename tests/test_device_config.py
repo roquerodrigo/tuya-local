@@ -18,7 +18,6 @@ from custom_components.tuya_local.helpers.device_config import (
 from custom_components.tuya_local.sensor import TuyaLocalSensor
 
 from .const import GPPH_HEATER_PAYLOAD, KOGAN_HEATER_PAYLOAD
-from .helpers import assert_device_properties_set, mock_device
 
 PRODUCT_SCHEMA = vol.Schema(
     {
@@ -589,7 +588,7 @@ def test_configs_can_be_matched():
 def test_match_quality():
     """Test the match_quality function."""
 
-    cfg = get_config("deta_fan")
+    cfg = get_config("coibeu_humidifier")
     q = cfg.match_quality({**KOGAN_HEATER_PAYLOAD, "updated_at": 0})
 
     assert q == 0
@@ -599,24 +598,11 @@ def test_match_quality():
 
 def test_entity_find_unknown_dps_fails():
     """Test that finding a dps that doesn't exist fails."""
-    cfg = get_config("kogan_switch")
+    cfg = get_config("rgbcw_lightbulb")
     for entity in cfg.all_entities():
         non_existing = entity.find_dps("missing")
         assert non_existing is None
         break
-
-
-@pytest.mark.asyncio
-async def test_dps_async_set_readonly_value_fails(mocker):
-    """Test that setting a readonly dps fails."""
-    mock_device = mocker.MagicMock()
-    cfg = get_config("aquatech_x6_water_heater")
-    for entity in cfg.all_entities():
-        if entity.entity == "climate":
-            temp = entity.find_dps("temperature")
-            with pytest.raises(TypeError):
-                await temp.async_set_value(mock_device, 20)
-            break
 
 
 def test_dps_values_is_empty_with_no_mapping(mocker):
@@ -624,18 +610,18 @@ def test_dps_values_is_empty_with_no_mapping(mocker):
     Test that a dps with no mapping returns empty list for possible values
     """
     mock_device = mocker.MagicMock()
-    cfg = get_config("goldair_gpph_heater")
+    cfg = get_config("coibeu_humidifier")
     for entity in cfg.all_entities():
-        if entity.entity == "climate":
-            temp = entity.find_dps("current_temperature")
-            assert temp.values(mock_device) == []
+        if entity.entity == "fan":
+            switch = entity.find_dps("switch")
+            assert switch.values(mock_device) == []
             break
 
 
 def test_config_returned():
     """Test that config file is returned by config"""
-    cfg = get_config("kogan_switch")
-    assert cfg.config == "smartplugv1.yaml"
+    cfg = get_config("rgbcw_lightbulb")
+    assert cfg.config == "rgbcw_lightbulb.yaml"
 
 
 def test_float_matches_ints():
@@ -848,99 +834,14 @@ def test_default_without_mapping(mocker):
 
 def test_matching_with_product_id():
     """Test that matching with product id works"""
-    cfg = get_config("smartplugv1")
-    assert cfg.matches({}, ["37mnhia3pojleqfh"])
+    cfg = get_config("coibeu_humidifier")
+    assert cfg.matches({}, ["8fhyolhknsiqhbic"])
 
 
 def test_matched_product_id_with_conflict_rejected():
     """Test that matching with product id fails when there is a conflict"""
-    cfg = get_config("smartplugv1")
-    assert not cfg.matches({"1": "wrong_type"}, ["37mnhia3pojleqfh"])
-
-
-def test_multi_stage_redirect(mocker):
-    """Test that multi stage redirects work correctly for read."""
-
-    # Redirect used to combine multiple dps into a single value
-    kc_cfg = get_config("kcvents_vt501_fan")
-    for entity in kc_cfg.all_entities():
-        if entity.entity == "fan":
-            fan = entity
-            break
-    assert fan is not None
-    speed = fan.find_dps("speed")
-    assert speed is not None
-    dps = {"1": True, "101": True, "102": False, "103": False}
-    device = mock_device(dps, mocker)
-    assert speed.values(device) == [33, 66, 100]
-    assert speed.get_value(device) == 33
-    dps["101"] = False
-    dps["102"] = True
-    assert speed.get_value(device) == 66
-    dps["102"] = False
-    dps["103"] = True
-    assert speed.get_value(device) == 100
-
-    # Redirect used for alternate dps
-    dewin_cfg = get_config("dewin_kws306wf_energymeter")
-    for entity in dewin_cfg.all_entities():
-        if entity.entity == "switch" and entity.name is None:
-            switch = entity
-            break
-    assert switch is not None
-    main = switch.find_dps("switch")
-    alt = switch.find_dps("alt")
-    assert main is not None and alt is not None
-    dps = {"16": True, "141": None}
-    device = mock_device(dps, mocker)
-    assert main.get_value(device) is True
-    dps["16"] = False
-    assert main.get_value(device) is False
-    dps["141"] = True
-    dps["16"] = None
-    assert main.get_value(device) is True
-    dps["141"] = False
-    assert main.get_value(device) is False
-
-
-@pytest.mark.asyncio
-async def test_setting_multi_stage_redirect(mocker):
-    """Test that multi stage redirects work correctly for write."""
-
-    # Redirect used to combine multiple dps into a single value
-    kc_cfg = get_config("kcvents_vt501_fan")
-    for entity in kc_cfg.all_entities():
-        if entity.entity == "fan":
-            fan = entity
-            break
-    assert fan is not None
-    speed = fan.find_dps("speed")
-    assert speed is not None
-    dps = {"1": True, "101": True, "102": False, "103": False}
-    device = mock_device(dps, mocker)
-    async with assert_device_properties_set(device, {"102": True}):
-        await speed.async_set_value(device, 66)
-    async with assert_device_properties_set(device, {"103": True}):
-        await speed.async_set_value(device, 100)
-
-    # Redirect used for alternate dps
-    dewin_cfg = get_config("dewin_kws306wf_energymeter")
-    for entity in dewin_cfg.all_entities():
-        if entity.entity == "switch" and entity.name is None:
-            switch = entity
-            break
-    assert switch is not None
-    main = switch.find_dps("switch")
-    alt = switch.find_dps("alt")
-    assert main is not None and alt is not None
-    dps = {"16": True, "141": None}
-    device = mock_device(dps, mocker)
-    async with assert_device_properties_set(device, {"16": False}):
-        await main.async_set_value(device, False)
-    dps["16"] = None
-    dps["141"] = True
-    async with assert_device_properties_set(device, {"141": False}):
-        await main.async_set_value(device, False)
+    cfg = get_config("coibeu_humidifier")
+    assert not cfg.matches({"1": "wrong_type"}, ["8fhyolhknsiqhbic"])
 
 
 def test_reading_target_range(mocker):

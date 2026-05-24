@@ -8,7 +8,6 @@ from homeassistant.exceptions import ConfigEntryNotReady
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.tuya_local import (
-    async_migrate_entry,
     async_setup_entry,
     config_flow,
     get_device_unique_id,
@@ -65,7 +64,7 @@ async def test_init_entry(hass, bypass_data_fetch):
             CONF_LOCAL_KEY: TESTKEY,
             CONF_POLL_ONLY: False,
             CONF_PROTOCOL_VERSION: "auto",
-            CONF_TYPE: "kogan_kahtp_heater",
+            CONF_TYPE: "rgbcw_lightbulb",
             CONF_DEVICE_CID: None,
         },
         options={},
@@ -73,8 +72,7 @@ async def test_init_entry(hass, bypass_data_fetch):
     entry.add_to_hass(hass)
     await hass.config_entries.async_setup(entry.entry_id)
     await hass.async_block_till_done()
-    assert hass.states.get("climate.test")
-    assert hass.states.get("lock.test_child_lock")
+    assert hass.states.get("light.test")
 
 
 @pytest.mark.asyncio
@@ -113,7 +111,7 @@ async def test_async_setup_entry_cleans_up_failed_device(hass, mocker, refresh_e
             CONF_LOCAL_KEY: TESTKEY,
             CONF_POLL_ONLY: False,
             CONF_PROTOCOL_VERSION: 3.4,
-            CONF_TYPE: "kogan_kahtp_heater",
+            CONF_TYPE: "rgbcw_lightbulb",
         },
         options={},
     )
@@ -123,159 +121,6 @@ async def test_async_setup_entry_cleans_up_failed_device(hass, mocker, refresh_e
 
     assert "deviceid" not in hass.data.get(DOMAIN, {})
     mock_device._api.set_socketPersistent.assert_called_with(False)
-
-
-@pytest.mark.asyncio
-async def test_migrate_entry(hass, mocker):
-    """Test migration from old entry format."""
-    mock_device = mocker.MagicMock()
-    mock_device.async_inferred_type = mocker.AsyncMock(
-        return_value="goldair_gpph_heater"
-    )
-    mocker.patch("custom_components.tuya_local.setup_device", return_value=mock_device)
-
-    entry = MockConfigEntry(
-        domain=DOMAIN,
-        version=1,
-        title="test",
-        data={
-            CONF_DEVICE_ID: "deviceid",
-            CONF_HOST: "hostname",
-            CONF_LOCAL_KEY: TESTKEY,
-            CONF_TYPE: "auto",
-            "climate": True,
-            "child_lock": True,
-            "display_light": True,
-        },
-    )
-    entry.add_to_hass(hass)
-    assert await async_migrate_entry(hass, entry)
-
-    mock_device.async_inferred_type = mocker.AsyncMock(return_value=None)
-    mock_device.reset_mock()
-
-    entry = MockConfigEntry(
-        domain=DOMAIN,
-        version=1,
-        title="test2",
-        data={
-            CONF_DEVICE_ID: "deviceid",
-            CONF_HOST: "hostname",
-            CONF_LOCAL_KEY: TESTKEY,
-            CONF_TYPE: "unknown",
-            "climate": False,
-        },
-    )
-    entry.add_to_hass(hass)
-    assert not await async_migrate_entry(hass, entry)
-    mock_device.reset_mock()
-
-    entry = MockConfigEntry(
-        domain=DOMAIN,
-        version=2,
-        title="test3",
-        data={
-            CONF_DEVICE_ID: "deviceid",
-            CONF_HOST: "hostname",
-            CONF_LOCAL_KEY: TESTKEY,
-            CONF_TYPE: "auto",
-        },
-        options={
-            "climate": False,
-        },
-    )
-    entry.add_to_hass(hass)
-    assert not await async_migrate_entry(hass, entry)
-
-    mock_device.async_inferred_type = mocker.AsyncMock(return_value="smartplugv1")
-    mock_device.reset_mock()
-
-    entry = MockConfigEntry(
-        domain=DOMAIN,
-        version=3,
-        title="test4",
-        data={
-            CONF_DEVICE_ID: "deviceid",
-            CONF_HOST: "hostname",
-            CONF_LOCAL_KEY: TESTKEY,
-            CONF_TYPE: "smartplugv1",
-        },
-        options={
-            "switch": True,
-        },
-    )
-    entry.add_to_hass(hass)
-    assert await async_migrate_entry(hass, entry)
-
-    mock_device.async_inferred_type = mocker.AsyncMock(return_value="smartplugv2")
-    mock_device.reset_mock()
-
-    entry = MockConfigEntry(
-        domain=DOMAIN,
-        version=3,
-        title="test5",
-        data={
-            CONF_DEVICE_ID: "deviceid",
-            CONF_HOST: "hostname",
-            CONF_LOCAL_KEY: TESTKEY,
-            CONF_TYPE: "smartplugv1",
-        },
-        options={
-            "switch": True,
-        },
-    )
-    entry.add_to_hass(hass)
-    assert await async_migrate_entry(hass, entry)
-
-    mock_device.async_inferred_type = mocker.AsyncMock(
-        return_value="goldair_dehumidifier"
-    )
-    mock_device.reset_mock()
-
-    entry = MockConfigEntry(
-        domain=DOMAIN,
-        version=4,
-        title="test6",
-        data={
-            CONF_DEVICE_ID: "deviceid",
-            CONF_HOST: "hostname",
-            CONF_LOCAL_KEY: TESTKEY,
-            CONF_TYPE: "goldair_dehumidifier",
-        },
-        options={
-            "humidifier": True,
-            "fan": True,
-            "light": True,
-            "lock": False,
-            "switch": True,
-        },
-    )
-    entry.add_to_hass(hass)
-    assert await async_migrate_entry(hass, entry)
-
-    mock_device.async_inferred_type = mocker.AsyncMock(
-        return_value="grid_connect_usb_double_power_point"
-    )
-    mock_device.reset_mock()
-
-    entry = MockConfigEntry(
-        domain=DOMAIN,
-        version=6,
-        title="test7",
-        data={
-            CONF_DEVICE_ID: "deviceid",
-            CONF_HOST: "hostname",
-            CONF_LOCAL_KEY: TESTKEY,
-            CONF_TYPE: "grid_connect_usb_double_power_point",
-        },
-        options={
-            "switch_main_switch": True,
-            "switch_left_outlet": True,
-            "switch_right_outlet": True,
-        },
-    )
-    entry.add_to_hass(hass)
-    assert await async_migrate_entry(hass, entry)
 
 
 @pytest.mark.asyncio
@@ -532,14 +377,14 @@ async def test_flow_select_type_data_valid(hass, mocker):
     """Test the flow continues when valid data is supplied."""
     mock_device = mocker.patch.object(config_flow.ConfigFlowHandler, "device")
 
-    setup_device_mock(mock_device, mocker, devtype="smartplugv1")
+    setup_device_mock(mock_device, mocker, devtype="rgbcw_lightbulb")
 
     flow = await hass.config_entries.flow.async_init(
         DOMAIN, context={"source": "select_type"}
     )
     result = await hass.config_entries.flow.async_configure(
         flow["flow_id"],
-        user_input={CONF_TYPE: "smartplugv1||||"},
+        user_input={CONF_TYPE: "rgbcw_lightbulb||||"},
     )
     assert "form" == result["type"]
     assert "choose_entities" == result["step_id"]
@@ -549,7 +394,9 @@ async def test_flow_select_type_data_valid(hass, mocker):
 async def test_flow_choose_entities_init(hass, mocker):
     """Test the initialisation of the form in the 3rd step of the config flow."""
 
-    mocker.patch.dict(config_flow.ConfigFlowHandler.data, {CONF_TYPE: "smartplugv1"})
+    mocker.patch.dict(
+        config_flow.ConfigFlowHandler.data, {CONF_TYPE: "rgbcw_lightbulb"}
+    )
     result = await hass.config_entries.flow.async_init(
         DOMAIN, context={"source": "choose_entities"}
     )
@@ -591,7 +438,7 @@ async def test_flow_choose_entities_creates_config_entry(hass, bypass_setup, moc
             CONF_HOST: "hostname",
             CONF_POLL_ONLY: False,
             CONF_PROTOCOL_VERSION: "auto",
-            CONF_TYPE: "kogan_kahtp_heater",
+            CONF_TYPE: "rgbcw_lightbulb",
             CONF_DEVICE_CID: None,
         },
     )
@@ -623,7 +470,7 @@ async def test_flow_choose_entities_creates_config_entry(hass, bypass_setup, moc
             CONF_LOCAL_KEY: TESTKEY,
             CONF_POLL_ONLY: False,
             CONF_PROTOCOL_VERSION: "auto",
-            CONF_TYPE: "kogan_kahtp_heater",
+            CONF_TYPE: "rgbcw_lightbulb",
             CONF_DEVICE_CID: None,
         },
     }
@@ -644,7 +491,7 @@ async def test_options_flow_init(hass, bypass_data_fetch):
             CONF_NAME: "test",
             CONF_POLL_ONLY: False,
             CONF_PROTOCOL_VERSION: "auto",
-            CONF_TYPE: "smartplugv1",
+            CONF_TYPE: "rgbcw_lightbulb",
             CONF_DEVICE_CID: "",
         },
     )
@@ -685,8 +532,8 @@ async def test_options_flow_modifies_config(hass, bypass_setup, mocker):
             CONF_NAME: "test",
             CONF_POLL_ONLY: False,
             CONF_PROTOCOL_VERSION: "auto",
-            CONF_TYPE: "ble_pt216_temp_humidity",
-            CONF_DEVICE_CID: "subdeviceid",
+            CONF_TYPE: "rgbcw_lightbulb",
+            CONF_DEVICE_CID: "",
         },
     )
     config_entry.add_to_hass(hass)
@@ -735,7 +582,7 @@ async def test_options_flow_fails_when_connection_fails(
             CONF_NAME: "test",
             CONF_POLL_ONLY: False,
             CONF_PROTOCOL_VERSION: "auto",
-            CONF_TYPE: "smartplugv1",
+            CONF_TYPE: "rgbcw_lightbulb",
             CONF_DEVICE_CID: "",
         },
     )

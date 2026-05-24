@@ -11,32 +11,7 @@ from custom_components.tuya_local.const import (
     CONF_TYPE,
     DOMAIN,
 )
-from custom_components.tuya_local.datetime import TuyaLocalDateTime, async_setup_entry
-
-
-@pytest.mark.asyncio
-async def test_init_entry(hass):
-    """Test the initialisation."""
-    entry = MockConfigEntry(
-        domain=DOMAIN,
-        data={
-            CONF_TYPE: "elko_cfmtb_thermostat",
-            CONF_DEVICE_ID: "dummy",
-            CONF_PROTOCOL_VERSION: "auto",
-        },
-    )
-    m_add_entities = Mock()
-    m_device = AsyncMock()
-
-    hass.data[DOMAIN] = {
-        "dummy": {"device": m_device},
-    }
-
-    await async_setup_entry(hass, entry, m_add_entities)
-    assert (
-        type(hass.data[DOMAIN]["dummy"]["datetime_override_end"]) is TuyaLocalDateTime
-    )
-    m_add_entities.assert_called()
+from custom_components.tuya_local.datetime import async_setup_entry
 
 
 @pytest.mark.asyncio

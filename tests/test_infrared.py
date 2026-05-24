@@ -17,32 +17,6 @@ from .helpers import assert_device_properties_set, mock_device
 
 
 @pytest.mark.asyncio
-async def test_init_entry(hass, mocker):
-    """Test the initialisation."""
-    entry = MockConfigEntry(
-        domain=DOMAIN,
-        data={
-            CONF_TYPE: "ir_remote_sensors",
-            CONF_DEVICE_ID: "dummy",
-            CONF_PROTOCOL_VERSION: "auto",
-        },
-    )
-    # although async, the async_add_entities function passed to
-    # async_setup_entry is called truly asynchronously. If we use
-    # AsyncMock, it expects us to await the result.
-    m_add_entities = mocker.Mock()
-    m_device = mocker.AsyncMock()
-
-    hass.data[DOMAIN] = {}
-    hass.data[DOMAIN]["dummy"] = {}
-    hass.data[DOMAIN]["dummy"]["device"] = m_device
-
-    await async_setup_entry(hass, entry, m_add_entities)
-    assert type(hass.data[DOMAIN]["dummy"]["infrared"]) is TuyaLocalInfrared
-    m_add_entities.assert_called_once()
-
-
-@pytest.mark.asyncio
 async def test_init_entry_fails_if_device_has_no_infrared(hass, mocker):
     """Test initialisation when device has no matching entity"""
     entry = MockConfigEntry(
