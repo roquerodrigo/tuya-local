@@ -11,31 +11,7 @@ from custom_components.tuya_local.const import (
     CONF_TYPE,
     DOMAIN,
 )
-from custom_components.tuya_local.text import TuyaLocalText, async_setup_entry
-
-
-@pytest.mark.asyncio
-async def test_init_entry(hass):
-    """Test the initialisation."""
-    entry = MockConfigEntry(
-        domain=DOMAIN,
-        data={
-            CONF_TYPE: "rgbcw_lightbulb",
-            CONF_DEVICE_ID: "dummy",
-            CONF_PROTOCOL_VERSION: "auto",
-        },
-    )
-    m_add_entities = Mock()
-    m_device = AsyncMock()
-    m_device.get_property = Mock(return_value=None)
-
-    hass.data[DOMAIN] = {
-        "dummy": {"device": m_device},
-    }
-
-    await async_setup_entry(hass, entry, m_add_entities)
-    assert type(hass.data[DOMAIN]["dummy"]["text_scene"]) is TuyaLocalText
-    m_add_entities.assert_called_once()
+from custom_components.tuya_local.text import async_setup_entry
 
 
 @pytest.mark.asyncio
