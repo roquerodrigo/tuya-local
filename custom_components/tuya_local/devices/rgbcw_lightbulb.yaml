@@ -62,10 +62,6 @@ entities:
             value: color_temp
           - dps_val: colour
             value: hs
-          - dps_val: scene
-            value: Scene
-          - dps_val: music
-            value: Music
       - id: 22
         name: brightness
         type: integer

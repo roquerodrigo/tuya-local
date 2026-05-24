@@ -251,7 +251,11 @@ class TuyaLocalLight(TuyaLocalEntity, LightEntity):
                 for effect in self._color_mode_dps.values(self._device)
                 if effect and not hasattr(ColorMode, effect.upper())
             ]
-            effects.append(EFFECT_OFF)
+            # Only expose the effect control when there are real effects.
+            # A color_mode dp that only carries plain color modes would
+            # otherwise advertise a useless "off"-only effect list.
+            if effects:
+                effects.append(EFFECT_OFF)
             return effects
 
     @property

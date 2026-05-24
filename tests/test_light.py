@@ -3,6 +3,7 @@
 from unittest.mock import AsyncMock, Mock
 
 import pytest
+from homeassistant.components.light import LightEntityFeature
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.tuya_local.const import (
@@ -228,3 +229,40 @@ async def test_is_off_when_off_by_brightness():
     light = TuyaLocalLight(mock_device, config)
     assert light.is_on is False
     assert light.brightness == 0
+
+
+def _color_mode_light(mock_device, extra_mappings=None):
+    """Build a light whose color_mode dp carries the given extra mappings."""
+    mock_device.get_property = Mock()
+    dps = {"1": True, "2": "white"}
+    mock_device.get_property.side_effect = lambda arg: dps[arg]
+    mapping = [
+        {"dps_val": "white", "value": "color_temp"},
+        {"dps_val": "colour", "value": "hs"},
+    ]
+    mapping.extend(extra_mappings or [])
+    config = TuyaEntityConfig(
+        Mock(),
+        {
+            "entity": "light",
+            "dps": [
+                {"id": "1", "name": "switch", "type": "boolean"},
+                {"id": "2", "name": "color_mode", "type": "string", "mapping": mapping},
+            ],
+        },
+    )
+    return TuyaLocalLight(mock_device, config)
+
+
+def test_no_effect_when_color_mode_has_no_real_effects():
+    """A color_mode dp with only plain color modes must not expose effects."""
+    light = _color_mode_light(AsyncMock())
+    assert light.effect_list == []
+    assert not (light.supported_features & LightEntityFeature.EFFECT)
+
+
+def test_effect_exposed_when_color_mode_has_real_effects():
+    """A color_mode dp with a non-color value still exposes it as an effect."""
+    light = _color_mode_light(AsyncMock(), [{"dps_val": "scene", "value": "Scene"}])
+    assert light.effect_list == ["Scene", "off"]
+    assert light.supported_features & LightEntityFeature.EFFECT
