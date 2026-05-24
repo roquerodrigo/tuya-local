@@ -25,5 +25,6 @@ entities:
             value: true
           - dps_val: closing
             value: false
-          - dps_val: null
-            value: null
+          # catch-all: any other/unknown value (eg after a power loss)
+          # maps to unknown position instead of breaking the entity
+          - value: null
