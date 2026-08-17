@@ -1,0 +1,12 @@
+name: Tomada inteligente AVATTO
+products:
+  - id: tsviulglvlipwggk
+    manufacturer: AVATTO
+    model: Wi-Fi Smart Socket 16A
+entities:
+  - entity: switch
+    class: outlet
+    dps:
+      - id: 1
+        name: switch
+        type: boolean
