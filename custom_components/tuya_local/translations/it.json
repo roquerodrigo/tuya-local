@@ -310,7 +310,9 @@
                             "fan_only": "Solo ventola",
                             "heat": "Aria riscaldata",
                             "floor_cool": "Pavimento fresco",
-                            "floor_heat": "Pavimento riscaldato"
+                            "floor_heat": "Pavimento riscaldato",
+                            "air_floor_cool": "Aria e pavimento freschi",
+                            "air_floor_heat": "Aria e pavimento riscaldati"
                         }
                     }
                 }
@@ -357,7 +359,9 @@
                             "program_2": "Programma 2",
                             "program_3": "Programma 3",
                             "standby": "Standby",
-                            "fan_only": "Solo ventola"
+                            "fan_only": "Solo ventola",
+                            "program": "Programma",
+                            "anti_frost": "Antigelo"
                         }
                     }
                 }
@@ -409,6 +413,9 @@
         "event": {
             "alarm": {
                 "name": "Allarme"
+            },
+            "notification": {
+                "name": "Notifica"
             }
         },
         "humidifier": {
@@ -504,7 +511,7 @@
                             "auto": "Auto",
                             "manual": "Manuale",
                             "eco": "Eco",
-                            "anti-condensation": "Anticondensa",
+                            "anti_condensation": "Anticondensa",
                             "extractor": "Estrattore",
                             "heat_recovery": "Recupero di calore",
                             "timer": "Timer",
@@ -559,6 +566,9 @@
             }
         },
         "number": {
+            "flame_level": {
+                "name": "Livello della fiamma"
+            },
             "manual_feed": {
                 "name": "Alimentazione manuale"
             },
@@ -680,6 +690,11 @@
                     "spanish": "Español",
                     "turkish": "Türkçe",
                     "polish": "Polski",
+                    "bulgarian": "Български",
+                    "czech": "Čeština",
+                    "romanian": "Română",
+                    "slovak": "Slovenčina",
+                    "thai": "ไทย",
                     "vietnamese": "Tiếng Việt"
                 }
             },
@@ -714,6 +729,14 @@
                     "high": "Alto"
                 }
             },
+            "night_vision": {
+                "name": "Visione notturna",
+                "state": {
+                    "off": "Spento",
+                    "on": "Acceso",
+                    "auto": "Auto"
+                }
+            },
             "recipe": {
                 "name": "Ricetta",
                 "state": {
@@ -742,6 +765,13 @@
                     "preheat": "Preriscaldare"
                 }
             },
+            "recording_mode": {
+                "name": "Modalità di registrazione",
+                "state": {
+                    "event": "Evento",
+                    "continuous": "Continuo"
+                }
+            },
             "scene": {
                 "name": "Scena",
                 "state": {
@@ -765,6 +795,7 @@
                 "state": {
                     "cancel": "Annulla",
                     "continuous": "Continuo",
+                    "custom": "Personalizzato",
                     "5s": "5 secondi",
                     "10s": "10 secondi",
                     "15s": "15 secondi",
@@ -837,7 +868,13 @@
                     "4d": "4 giorni",
                     "5d": "5 giorni",
                     "6d": "6 giorni",
-                    "7d": "7 giorni"
+                    "7d": "7 giorni",
+                    "10d": "10 giorni",
+                    "30d": "30 giorni",
+                    "60d": "60 giorni",
+                    "90d": "90 giorni",
+                    "160d": "160 giorni",
+                    "365d": "365 giorni"
                 }
             },
             "temperature_unit": {
@@ -1146,6 +1183,17 @@
                     "danger": "Pericolosa"
                 }
             },
+            "sd_status": {
+                "name": "Stato SD",
+                "state": {
+                    "fault": "Guasto",
+                    "formatting": "Formattazione",
+                    "full": "Pieno",
+                    "missing": "Mancante",
+                    "normal": "Normale",
+                    "unformatted": "Non formattato"
+                }
+            },
             "status": {
                 "name": "Stato",
                 "state": {
@@ -1205,6 +1253,7 @@
                     "occupied": "Occupato",
                     "normal": "Normale",
                     "low": "Basso",
+                    "medium": "Medio",
                     "high": "Alto",
                     "unwashed": "Non lavato",
                     "pre_washing": "Pre-lavaggio",
@@ -1224,8 +1273,6 @@
                     "full": "Pieno",
                     "empty": "Vuoto",
                     "missing": "Mancante",
-                    "formatting": "Formattazione",
-                    "unformatted": "Non formattato",
                     "failed": "Fallito",
                     "replying": "Risposta",
                     "playback": "Riproduzione",
@@ -1322,6 +1369,15 @@
             }
         },
         "switch": {
+            "timer": {
+                "name": "Timer"
+            },
+            "empty_tank": {
+                "name": "Svuotare il serbatoio"
+            },
+            "fill_tank": {
+                "name": "Riempire il serbatoio"
+            },
             "anti_frost": {
                 "name": "Antigelo"
             },
@@ -1337,6 +1393,9 @@
                     "off": "Aperto",
                     "on": "Chiuso"
                 }
+            },
+            "camera_record": {
+                "name": "Registrazione fotocamera"
             },
             "do_not_disturb": {
                 "name": "Non disturbare"
@@ -1424,6 +1483,12 @@
             },
             "snooze": {
                 "name": "Posticipo"
+            },
+            "motion_detection": {
+                "name": "Rilevamento del movimento"
+            },
+            "watermark": {
+                "name": "Filigrana"
             }
         },
         "text": {

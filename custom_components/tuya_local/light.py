@@ -37,6 +37,15 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     )
 
 
+def _ha_brightness_to_dp_value(ha_brightness, dp_range):
+    """Convert HA brightness to a clamped device DP value."""
+    if ha_brightness == 1 and dp_range[0] != 0:
+        return dp_range[0]
+
+    dp_value = color_util.brightness_to_value(dp_range, ha_brightness)
+    return max(dp_range[0], dp_value)
+
+
 class TuyaLocalLight(TuyaLocalEntity, LightEntity):
     """Representation of a Tuya WiFi-connected light."""
 
@@ -65,8 +74,9 @@ class TuyaLocalLight(TuyaLocalEntity, LightEntity):
             if m:
                 tr = m.get("target_range")
                 if tr:
-                    self._attr_min_color_temp_kelvin = tr.get("min")
-                    self._attr_max_color_temp_kelvin = tr.get("max")
+                    # Target range can be inverted, so use min/max functions to ensure correct order
+                    self._attr_min_color_temp_kelvin = min(tr.get("min"), tr.get("max"))
+                    self._attr_max_color_temp_kelvin = max(tr.get("min"), tr.get("max"))
                     range_set = True
             if not range_set:
                 r = self._color_temp_dps.range(self._device)
@@ -177,9 +187,21 @@ class TuyaLocalLight(TuyaLocalEntity, LightEntity):
         return self._white_brightness
 
     @property
-    def _white_brightness(self):
+    def _effective_brightness_range(self):
+        """Get the effective brightness range of the light"""
         if self._brightness_dps:
             r = self._brightness_dps.range(self._device)
+            if r:
+                if self._switch_dps is None and r[0] == 0:
+                    # If the light has no switch, and the brightness range starts
+                    # at 0, the effective minimum brightness is 1
+                    return (self._brightness_dps.step(self._device, False), r[1])
+                return r
+
+    @property
+    def _white_brightness(self):
+        if self._brightness_dps:
+            r = self._effective_brightness_range
             val = self._brightness_dps.get_value(self._device)
             if r and val:
                 val = color_util.value_to_brightness(r, val)
@@ -289,10 +311,6 @@ class TuyaLocalLight(TuyaLocalEntity, LightEntity):
             return best_match
 
     async def async_turn_on(self, **params):
-        async with self._device.set_lock:
-            await self._async_turn_on_locked(**params)
-
-    async def _async_turn_on_locked(self, **params):
         settings = {}
         color_mode = None
         _LOGGER.debug("Light turn_on: %s", params)
@@ -301,13 +319,9 @@ class TuyaLocalLight(TuyaLocalEntity, LightEntity):
                 color_mode = ColorMode.WHITE
             if ATTR_BRIGHTNESS not in params and self._brightness_dps:
                 bright = params.get(ATTR_WHITE)
-                r = self._brightness_dps.range(self._device)
+                r = self._effective_brightness_range
                 if r:
-                    # ensure full range is used
-                    if bright == 1 and r[0] != 0:
-                        bright = r[0]
-                    else:
-                        bright = color_util.brightness_to_value(r, bright)
+                    bright = _ha_brightness_to_dp_value(bright, r)
 
                 _LOGGER.info(
                     "%s setting white brightness to %d", self._config.config_id, bright
@@ -478,14 +492,9 @@ class TuyaLocalLight(TuyaLocalEntity, LightEntity):
         ):
             bright = params.get(ATTR_BRIGHTNESS)
 
-            r = self._brightness_dps.range(self._device)
+            r = self._effective_brightness_range
             if r:
-                # ensure full range is used
-                if bright == 1 and r[0] != 0:
-                    bright = r[0]
-                else:
-                    bright = color_util.brightness_to_value(r, bright)
-
+                bright = _ha_brightness_to_dp_value(bright, r)
             _LOGGER.info("%s setting brightness to %d", self._config.config_id, bright)
             settings = {
                 **settings,
@@ -536,7 +545,7 @@ class TuyaLocalLight(TuyaLocalEntity, LightEntity):
             )
         ):
             bright = 255
-            r = self._brightness_dps.range(self._device)
+            r = self._effective_brightness_range
             if r:
                 bright = color_util.brightness_to_value(r, bright)
             _LOGGER.info(
@@ -572,10 +581,6 @@ class TuyaLocalLight(TuyaLocalEntity, LightEntity):
             await self._device.async_set_properties(settings)
 
     async def async_turn_off(self):
-        async with self._device.set_lock:
-            await self._async_turn_off_locked()
-
-    async def _async_turn_off_locked(self):
         if self._switch_dps and not self._switch_dps.readonly:
             _LOGGER.info("%s turning light off", self._config.config_id)
             await self._switch_dps.async_set_value(self._device, False)

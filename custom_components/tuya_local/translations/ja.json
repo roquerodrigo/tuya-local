@@ -310,7 +310,9 @@
                             "fan_only": "ファン",
                             "heat": "温風",
                             "floor_cool": "冷却床",
-                            "floor_heat": "床暖房"
+                            "floor_heat": "床暖房",
+                            "air_floor_cool": "空気と床冷却",
+                            "air_floor_heat": "空気と床暖房"
                         }
                     }
                 }
@@ -357,7 +359,9 @@
                             "program_2": "プログラム 2",
                             "program_3": "プログラム 3",
                             "standby": "スタンバイ",
-                            "fan_only": "ファンのみ"
+                            "fan_only": "ファンのみ",
+                            "program": "プログラム",
+                            "anti_frost": "霜防止"
                         }
                     }
                 }
@@ -409,6 +413,9 @@
         "event": {
             "alarm": {
                 "name": "アラーム"
+            },
+            "notification": {
+                "name": "通知"
             }
         },
         "humidifier": {
@@ -504,7 +511,7 @@
                             "auto": "自動",
                             "manual": "マニュアル",
                             "eco": "エコ",
-                            "anti-condensation": "結露防止",
+                            "anti_condensation": "結露防止",
                             "extractor": "抽出",
                             "heat_recovery": "熱回収",
                             "timer": "タイマー",
@@ -559,6 +566,9 @@
             }
         },
         "number": {
+            "flame_level": {
+                "name": "炎レベル"
+            },
             "manual_feed": {
                 "name": "手動給餌量"
             },
@@ -680,6 +690,11 @@
                     "spanish": "Español",
                     "turkish": "Türkçe",
                     "polish": "Polski",
+                    "bulgarian": "Български",
+                    "czech": "Čeština",
+                    "romanian": "Română",
+                    "slovak": "Slovenčina",
+                    "thai": "ไทย",
                     "vietnamese": "Tiếng Việt"
                 }
             },
@@ -714,6 +729,14 @@
                     "high": "高い"
                 }
             },
+            "night_vision": {
+                "name": "ナイトビジョン",
+                "state": {
+                    "off": "オフ",
+                    "on": "オン",
+                    "auto": "自動"
+                }
+            },
             "recipe": {
                 "name": "レシピ",
                 "state": {
@@ -742,6 +765,13 @@
                     "preheat": "予熱"
                 }
             },
+            "recording_mode": {
+                "name": "録画モード",
+                "state": {
+                    "event": "イベント",
+                    "continuous": "連続"
+                }
+            },
             "scene": {
                 "name": "シーン",
                 "state": {
@@ -765,6 +795,7 @@
                 "state": {
                     "cancel": "キャンセル",
                     "continuous": "連続",
+                    "custom": "カスタム",
                     "5s": "5秒",
                     "10s": "10秒",
                     "15s": "15秒",
@@ -837,7 +868,13 @@
                     "4d": "4日",
                     "5d": "5日",
                     "6d": "6日",
-                    "7d": "7日"
+                    "7d": "7日",
+                    "10d": "10日",
+                    "30d": "30日",
+                    "60d": "60日",
+                    "90d": "90日",
+                    "160d": "160日",
+                    "365d": "365日"
                 }
             },
             "temperature_unit": {
@@ -1146,6 +1183,17 @@
                     "danger": "危険"
                 }
             },
+            "sd_status": {
+                "name": "SDカードステータス",
+                "state": {
+                    "fault": "故障",
+                    "formatting": "フォーマット中",
+                    "full": "満杯",
+                    "missing": "欠落",
+                    "normal": "正常",
+                    "unformatted": "未フォーマット"
+                }
+            },
             "status": {
                 "name": "ステータス",
                 "state": {
@@ -1205,6 +1253,7 @@
                     "occupied": "占有",
                     "normal": "通常",
                     "low": "低い",
+                    "medium": "中",
                     "high": "高い",
                     "unwashed": "未洗浄",
                     "pre_washing": "予洗い",
@@ -1224,8 +1273,6 @@
                     "full": "満杯",
                     "empty": "空",
                     "missing": "欠落",
-                    "formatting": "フォーマット中",
-                    "unformatted": "未フォーマット",
                     "failed": "失敗",
                     "replying": "返信中",
                     "playback": "再生",
@@ -1322,6 +1369,15 @@
             }
         },
         "switch": {
+            "timer": {
+                "name": "タイマー"
+            },
+            "empty_tank": {
+                "name": "タンクを空にする"
+            },
+            "fill_tank": {
+                "name": "タンクを満たす"
+            },
             "anti_frost": {
                 "name": "霜防止"
             },
@@ -1337,6 +1393,9 @@
                     "off": "トリップ",
                     "on": "リセット"
                 }
+            },
+            "camera_record": {
+                "name": "カメラ録画"
             },
             "do_not_disturb": {
                 "name": "邪魔しないでください"
@@ -1424,6 +1483,12 @@
             },
             "snooze": {
                 "name": "スヌーズ"
+            },
+            "motion_detection": {
+                "name": "モーション検出"
+            },
+            "watermark": {
+                "name": "ウォーターマーク"
             }
         },
         "text": {

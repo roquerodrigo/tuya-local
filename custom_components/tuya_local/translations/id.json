@@ -310,7 +310,9 @@
                             "fan_only": "Hanya kipas",
                             "heat": "Pemanas udara",
                             "floor_cool": "Pendingin lantai",
-                            "floor_heat": "Pemanas lantai"
+                            "floor_heat": "Pemanas lantai",
+                            "air_floor_cool": "Pendingin udara dan lantai",
+                            "air_floor_heat": "Pemanas udara dan lantai"
                         }
                     }
                 }
@@ -357,7 +359,9 @@
                             "program_2": "Program 2",
                             "program_3": "Program 3",
                             "standby": "Siaga",
-                            "fan_only": "Hanya kipas"
+                            "fan_only": "Hanya kipas",
+                            "program": "Program",
+                            "anti_frost": "Anti beku"
                         }
                     }
                 }
@@ -409,6 +413,9 @@
         "event": {
             "alarm": {
                 "name": "Alarm"
+            },
+            "notification": {
+                "name": "Pemberitahuan"
             }
         },
         "humidifier": {
@@ -504,7 +511,7 @@
                             "auto": "Otomatis",
                             "manual": "Manual",
                             "eco": "Hemat",
-                            "anti-condensation": "Anti kondensasi",
+                            "anti_condensation": "Anti kondensasi",
                             "extractor": "Ekstraktor",
                             "heat_recovery": "Pemulihan panas",
                             "timer": "Pengatur waktu",
@@ -559,6 +566,9 @@
             }
         },
         "number": {
+            "flame_level": {
+                "name": "Tingkat nyala api"
+            },
             "manual_feed": {
                 "name": "Pemberian makan manual"
             },
@@ -680,6 +690,11 @@
                     "spanish": "Español",
                     "turkish": "Türkçe",
                     "polish": "Polski",
+                    "bulgarian": "Български",
+                    "czech": "Čeština",
+                    "romanian": "Română",
+                    "slovak": "Slovenčina",
+                    "thai": "ไทย",
                     "vietnamese": "Tiếng Việt"
                 }
             },
@@ -714,6 +729,14 @@
                     "high": "Tinggi"
                 }
             },
+            "night_vision": {
+                "name": "Penglihatan malam",
+                "state": {
+                    "off": "Mati",
+                    "on": "Hidup",
+                    "auto": "Otomatis"
+                }
+            },
             "recipe": {
                 "name": "Resep",
                 "state": {
@@ -742,6 +765,13 @@
                     "preheat": "Pemanasan awal"
                 }
             },
+            "recording_mode": {
+                "name": "Mode perekaman",
+                "state": {
+                    "event": "Peristiwa",
+                    "continuous": "Terus menerus"
+                }
+            },
             "scene": {
                 "name": "Adegan",
                 "state": {
@@ -765,6 +795,7 @@
                 "state": {
                     "cancel": "Batal",
                     "continuous": "Terus menerus",
+                    "custom": "Kustom",
                     "5s": "5 detik",
                     "10s": "10 detik",
                     "15s": "15 detik",
@@ -837,7 +868,13 @@
                     "4d": "4 hari",
                     "5d": "5 hari",
                     "6d": "6 hari",
-                    "7d": "7 hari"
+                    "7d": "7 hari",
+                    "10d": "10 hari",
+                    "30d": "30 hari",
+                    "60d": "60 hari",
+                    "90d": "90 hari",
+                    "160d": "160 hari",
+                    "365d": "365 hari"
                 }
             },
             "temperature_unit": {
@@ -1146,6 +1183,17 @@
                     "danger": "Bahaya"
                 }
             },
+            "sd_status": {
+                "name": "Status SD",
+                "state": {
+                    "fault": "Kesalahan",
+                    "formatting": "Memformat",
+                    "full": "Penuh",
+                    "missing": "Hilang",
+                    "normal": "Normal",
+                    "unformatted": "Belum diformat"
+                }
+            },
             "status": {
                 "name": "Status",
                 "state": {
@@ -1205,6 +1253,7 @@
                     "occupied": "Terisi",
                     "normal": "Normal",
                     "low": "Rendah",
+                    "medium": "Sedang",
                     "high": "Tinggi",
                     "unwashed": "Belum dicuci",
                     "pre_washing": "Pencucian awal",
@@ -1224,8 +1273,6 @@
                     "full": "Penuh",
                     "empty": "Kosong",
                     "missing": "Hilang",
-                    "formatting": "Memformat",
-                    "unformatted": "Belum diformat",
                     "failed": "Gagal",
                     "replying": "Membalas",
                     "playback": "Pemutaran",
@@ -1322,6 +1369,15 @@
             }
         },
         "switch": {
+            "timer": {
+                "name": "Pengatur waktu"
+            },
+            "empty_tank": {
+                "name": "Kosongkan tangki"
+            },
+            "fill_tank": {
+                "name": "Isi tangki"
+            },
             "anti_frost": {
                 "name": "Anti beku"
             },
@@ -1337,6 +1393,9 @@
                     "on": "Tutup",
                     "off": "Buka"
                 }
+            },
+            "camera_record": {
+                "name": "Rekam kamera"
             },
             "do_not_disturb": {
                 "name": "Jangan ganggu"
@@ -1424,6 +1483,12 @@
             },
             "snooze": {
                 "name": "Tunda"
+            },
+            "motion_detection": {
+                "name": "Deteksi gerakan"
+            },
+            "watermark": {
+                "name": "Tanda air"
             }
         },
         "text": {

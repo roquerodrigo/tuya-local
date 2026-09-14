@@ -204,6 +204,136 @@ async def test_async_turn_on_with_brightness_on_packed_dp():
     assert sent_value & 0x000100000000 != 0
 
 
+@pytest.mark.parametrize(
+    ("brightness_range", "ha_value", "expected_dps", "path"),
+    [
+        # brightness_to_value() uses scale_to_ranged_value((1,255), target, bright).
+        # For small DP ranges, low HA brightness maps below the configured minimum:
+        #   (1, 6), 20   -> 20 * 6/255       = 0.470   -> below min 1
+        #   (10, 15), 20 -> 20 * 6/255 + 9    = 9.470   -> below min 10
+        #   (1, 6), 1    -> 1  * 6/255        = 0.024   -> below min 1 (HA minimum)
+        # Each case is tested via both code paths: brightness and white.
+        # 1-4. Original bug: low brightness maps below min
+        ({"min": 1, "max": 6}, 1, 1, "brightness"),
+        ({"min": 1, "max": 6}, 1, 1, "white"),
+        ({"min": 1, "max": 6}, 20, 1, "brightness"),
+        ({"min": 1, "max": 6}, 20, 1, "white"),
+        # 5-6 Theoretical case for a light that uses 0 as a non-off brightness value.
+        ({"min": 0, "max": 6}, 1, 0, "brightness"),
+        ({"min": 0, "max": 6}, 1, 0, "white"),
+        # 7-8. Generic min: not just tied to min=1
+        ({"min": 10, "max": 15}, 20, 10, "brightness"),
+        ({"min": 10, "max": 15}, 20, 10, "white"),
+        # 9-10. Wide range snap: ensures bright=1 snaps to physical min, not proportional (3.92 -> 4)
+        ({"min": 1, "max": 1000}, 1, 1, "brightness"),
+        ({"min": 1, "max": 1000}, 1, 1, "white"),
+        # 11-12. Wide offset range snap: proves snap uses actual DP min
+        ({"min": 10, "max": 1000}, 1, 10, "brightness"),
+        ({"min": 10, "max": 1000}, 1, 10, "white"),
+        # 13-14. Normal mid-range value: proves we don't over-clamp
+        ({"min": 1, "max": 6}, 128, 3, "brightness"),
+        ({"min": 1, "max": 6}, 128, 3, "white"),
+        # 15-16. Maximum value: proves upper bound is reachable
+        ({"min": 1, "max": 6}, 255, 6, "brightness"),
+        ({"min": 1, "max": 6}, 255, 6, "white"),
+    ],
+)
+@pytest.mark.asyncio
+async def test_async_turn_on_clamps_low_brightness_to_range_min(
+    brightness_range, ha_value, expected_dps, path
+):
+    """Low non-zero HA brightness should clamp to the first DP range value.
+
+    Tests both the regular brightness path (ATTR_BRIGHTNESS) and the white
+    brightness path (ATTR_WHITE) in async_turn_on, ensuring brightness_to_value
+    results below the DP minimum are clamped correctly.
+    """
+    mock_device = AsyncMock()
+    mock_device.get_property = Mock()
+
+    if path == "white":
+        dps_config = [
+            {"id": "1", "name": "switch", "type": "boolean"},
+            {
+                "id": "2",
+                "name": "color_mode",
+                "type": "string",
+                "mapping": [
+                    {"dps_val": "white", "value": "white"},
+                    {"dps_val": "colour", "value": "hs"},
+                ],
+            },
+            {
+                "id": "3",
+                "name": "brightness",
+                "type": "integer",
+                "range": brightness_range,
+            },
+        ]
+        device_dps = {"1": True, "2": "white", "3": brightness_range["min"]}
+        call_kwargs = {"white": ha_value}
+        assert_dp = "3"
+    else:
+        dps_config = [
+            {"id": "1", "name": "switch", "type": "boolean"},
+            {
+                "id": "2",
+                "name": "brightness",
+                "type": "integer",
+                "range": brightness_range,
+            },
+        ]
+        device_dps = {"1": True, "2": brightness_range["min"]}
+        call_kwargs = {"brightness": ha_value}
+        assert_dp = "2"
+
+    mock_device.get_property.side_effect = lambda arg: device_dps[arg]
+    mock_config = Mock()
+    config = TuyaEntityConfig(mock_config, {"entity": "light", "dps": dps_config})
+    light = TuyaLocalLight(mock_device, config)
+    await light.async_turn_on(**call_kwargs)
+    mock_device.async_set_properties.assert_called_once_with({assert_dp: expected_dps})
+
+
+@pytest.mark.parametrize(
+    ("brightness_range", "ha_value", "expected_dps", "step"),
+    [
+        ({"min": 0, "max": 6}, 1, 1, 1),
+        ({"min": 0, "max": 255}, 1, 10, 10),
+    ],
+)
+@pytest.mark.asyncio
+async def test_async_turn_on_avoids_0_when_0_is_off(
+    brightness_range, ha_value, expected_dps, step
+):
+    """Low non-zero HA brightness should clamp to the first non-off DP range value.
+
+    Tests the regular brightness path (ATTR_BRIGHTNESS), as ATTR_WHITE is not expected
+    to be used on a brightness only light, and was tested adequately above.
+    """
+    mock_device = AsyncMock()
+    mock_device.get_property = Mock()
+
+    dps_config = [
+        {
+            "id": "2",
+            "name": "brightness",
+            "type": "integer",
+            "range": brightness_range,
+            "mapping": [{"step": step}],
+        },
+    ]
+    device_dps = {"2": brightness_range["max"]}
+    call_kwargs = {"brightness": ha_value}
+
+    mock_device.get_property.side_effect = lambda arg: device_dps[arg]
+    mock_config = Mock()
+    config = TuyaEntityConfig(mock_config, {"entity": "light", "dps": dps_config})
+    light = TuyaLocalLight(mock_device, config)
+    await light.async_turn_on(**call_kwargs)
+    mock_device.async_set_properties.assert_called_once_with({"2": expected_dps})
+
+
 @pytest.mark.asyncio
 async def test_is_off_when_off_by_brightness():
     """Test that the light appears off when turned off by brightness."""

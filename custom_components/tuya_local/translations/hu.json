@@ -310,7 +310,9 @@
                             "fan_only": "Ventilátor",
                             "heat": "Meleg levegő",
                             "floor_cool": "Hűvös padló",
-                            "floor_heat": "Meleg padló"
+                            "floor_heat": "Meleg padló",
+                            "air_floor_cool": "Hűvös levegő és padló",
+                            "air_floor_heat": "Meleg levegő és padló"
                         }
                     }
                 }
@@ -357,7 +359,9 @@
                             "program_2": "Program 2",
                             "program_3": "Program 3",
                             "standby": "Készenlét",
-                            "fan_only": "Ventilátor"
+                            "fan_only": "Ventilátor",
+                            "program": "Programozott",
+                            "anti_frost": "Fagyásgátló"
                         }
                     }
                 }
@@ -409,6 +413,9 @@
         "event": {
             "alarm": {
                 "name": "Riasztás"
+            },
+            "notification": {
+                "name": "Értesítés"
             }
         },
         "humidifier": {
@@ -504,7 +511,7 @@
                             "auto": "Auto",
                             "manual": "Manuális",
                             "eco": "Eco",
-                            "anti-condensation": "Pára mentesítés",
+                            "anti_condensation": "Pára mentesítés",
                             "extractor": "Kivonat",
                             "heat_recovery": "Hővisszanyerés",
                             "timer": "Időzítő",
@@ -559,6 +566,9 @@
             }
         },
         "number": {
+            "flame_level": {
+                "name": "Lángszint"
+            },
             "manual_feed": {
                 "name": "Kézi etetés"
             },
@@ -680,6 +690,11 @@
                     "spanish": "Español",
                     "turkish": "Türkçe",
                     "polish": "Polski",
+                    "bulgarian": "Български",
+                    "czech": "Čeština",
+                    "romanian": "Română",
+                    "slovak": "Slovenčina",
+                    "thai": "ไทย",
                     "vietnamese": "Tiếng Việt"
                 }
             },
@@ -714,6 +729,14 @@
                     "high": "Magas"
                 }
             },
+            "night_vision": {
+                "name": "Éjjellátó",
+                "state": {
+                    "off": "Ki",
+                    "on": "Be",
+                    "auto": "Auto"
+                }
+            },
             "recipe": {
                 "name": "Recept",
                 "state": {
@@ -742,6 +765,13 @@
                     "preheat": "Előmelegítés"
                 }
             },
+            "recording_mode": {
+                "name": "Felvételi mód",
+                "state": {
+                    "event": "Esemény",
+                    "continuous": "Folyamatos"
+                }
+            },
             "scene": {
                 "name": "Jelenet",
                 "state": {
@@ -765,6 +795,7 @@
                 "state": {
                     "cancel": "Mégse",
                     "continuous": "Folyamatos",
+                    "custom": "Egyéni",
                     "5s": "5 másodperc",
                     "10s": "10 másodperc",
                     "15s": "15 másodperc",
@@ -837,7 +868,13 @@
                     "4d": "4 nap",
                     "5d": "5 nap",
                     "6d": "6 nap",
-                    "7d": "7 nap"
+                    "7d": "7 nap",
+                    "10d": "10 nap",
+                    "30d": "30 nap",
+                    "60d": "60 nap",
+                    "90d": "90 nap",
+                    "160d": "160 nap",
+                    "365d": "365 nap"
                 }
             },
             "temperature_unit": {
@@ -1146,6 +1183,17 @@
                     "danger": "Veszély"
                 }
             },
+            "sd_status": {
+                "name": "SD kártya állapota",
+                "state": {
+                    "fault": "Hiba",
+                    "formatting": "Formázás",
+                    "full": "Teljes",
+                    "missing": "Hiányzik",
+                    "normal": "Normál",
+                    "unformatted": "Nem formázott"
+                }
+            },
             "status": {
                 "name": "Állapot",
                 "state": {
@@ -1205,6 +1253,7 @@
                     "occupied": "Foglalt",
                     "normal": "Normál",
                     "low": "Alacsony",
+                    "medium": "Közepes",
                     "high": "Magas",
                     "unwashed": "Nem mosott",
                     "pre_washing": "Előmosás",
@@ -1224,8 +1273,6 @@
                     "full": "Teljes",
                     "empty": "Üres",
                     "missing": "Hiányzik",
-                    "formatting": "Formázás",
-                    "unformatted": "Nem formázott",
                     "failed": "Sikertelen",
                     "replying": "Válaszadás",
                     "playback": "Lejátszás",
@@ -1322,6 +1369,15 @@
             }
         },
         "switch": {
+            "timer": {
+                "name": "Időzítő"
+            },
+            "empty_tank": {
+                "name": "Tartály kiürítése"
+            },
+            "fill_tank": {
+                "name": "Tartály feltöltése"
+            },
             "anti_frost": {
                 "name": "Fagyálló"
             },
@@ -1337,6 +1393,9 @@
                     "off": "Nyitott",
                     "on": "Zárt"
                 }
+            },
+            "camera_record": {
+                "name": "Kamera felvétel"
             },
             "do_not_disturb": {
                 "name": "Ne zavarjanak"
@@ -1424,6 +1483,12 @@
             },
             "snooze": {
                 "name": "Szundi"
+            },
+            "motion_detection": {
+                "name": "Mozgásérzékelés"
+            },
+            "watermark": {
+                "name": "Vízjel"
             }
         },
         "text": {

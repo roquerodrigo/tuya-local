@@ -310,7 +310,9 @@
                             "fan_only": "پنکھا",
                             "heat": "گرم ہوا",
                             "floor_cool": "ٹھنڈا فرش",
-                            "floor_heat": "گرم فرش"
+                            "floor_heat": "گرم فرش",
+                            "air_floor_cool": "ہوا اور فرش ٹھنڈا",
+                            "air_floor_heat": "ہوا اور فرش گرم"
                         }
                     }
                 }
@@ -357,7 +359,9 @@
                             "program_2": "پروگرام 2",
                             "program_3": "پروگرام 3",
                             "standby": "اسٹینڈ بائی",
-                            "fan_only": "پنکھا"
+                            "fan_only": "پنکھا",
+                            "program": "پروگرام",
+                            "anti_frost": "اینٹی فراسٹ"
                         }
                     }
                 }
@@ -409,6 +413,9 @@
         "event": {
             "alarm": {
                 "name": "الارم"
+            },
+            "notification": {
+                "name": "اطلاع"
             }
         },
         "humidifier": {
@@ -504,7 +511,7 @@
                             "auto": "خود مختار",
                             "manual": "دستی",
                             "eco": "ایکو",
-                            "anti-condensation": "اینٹی کنڈینسیشن",
+                            "anti_condensation": "اینٹی کنڈینسیشن",
                             "extractor": "نکالنے والا",
                             "heat_recovery": "حرارتی بازیابی",
                             "timer": "ٹائمر",
@@ -559,6 +566,9 @@
             }
         },
         "number": {
+            "flame_level": {
+                "name": "شعلے کی سطح"
+            },
             "manual_feed": {
                 "name": "دستی فیڈ"
             },
@@ -680,6 +690,11 @@
                     "spanish": "Español",
                     "turkish": "Türkçe",
                     "polish": "Polski",
+                    "bulgarian": "Български",
+                    "czech": "Čeština",
+                    "romanian": "Română",
+                    "slovak": "Slovenčina",
+                    "thai": "ไทย",
                     "vietnamese": "Tiếng Việt"
                 }
             },
@@ -714,6 +729,14 @@
                     "high": "زیادہ"
                 }
             },
+            "night_vision": {
+                "name": "نائٹ وژن",
+                "state": {
+                    "off": "آف",
+                    "on": "آن",
+                    "auto": "خود کار"
+                }
+            },
             "recipe": {
                 "name": "ریسیپی",
                 "state": {
@@ -742,6 +765,13 @@
                     "preheat": "پری ہیٹ"
                 }
             },
+            "recording_mode": {
+                "name": "ریکارڈنگ موڈ",
+                "state": {
+                    "event": "واقعہ",
+                    "continuous": "مسلسل"
+                }
+            },
             "scene": {
                 "name": "منظر",
                 "state": {
@@ -765,6 +795,7 @@
                 "state": {
                     "cancel": "منسوخ کریں",
                     "continuous": "مسلسل",
+                    "custom": "اپنی مرضی",
                     "5s": "5 سیکنڈ",
                     "10s": "10 سیکنڈ",
                     "15s": "15 سیکنڈ",
@@ -837,7 +868,13 @@
                     "4d": "4 دن",
                     "5d": "5 دن",
                     "6d": "6 دن",
-                    "7d": "7 دن"
+                    "7d": "7 دن",
+                    "10d": "10 دن",
+                    "30d": "30 دن",
+                    "60d": "60 دن",
+                    "90d": "90 دن",
+                    "160d": "160 دن",
+                    "365d": "365 دن"
                 }
             },
             "temperature_unit": {
@@ -1146,6 +1183,17 @@
                     "danger": "خطرہ"
                 }
             },
+            "sd_status": {
+                "name": "ایس ڈی کارڈ کی حالت",
+                "state": {
+                    "fault": "خراب",
+                    "formatting": "فارمیٹنگ",
+                    "full": "مکمل",
+                    "missing": "غائب",
+                    "normal": "عام",
+                    "unformatted": "غیر شکل بند"
+                }
+            },
             "status": {
                 "name": "حالت",
                 "state": {
@@ -1205,6 +1253,7 @@
                     "occupied": "مصروف",
                     "normal": "عام",
                     "low": "کم",
+                    "medium": "درمیانہ",
                     "high": "زیادہ",
                     "unwashed": "نہ دھویا",
                     "pre_washing": "پری واشنگ",
@@ -1224,8 +1273,6 @@
                     "full": "مکمل",
                     "empty": "خالی",
                     "missing": "غائب",
-                    "formatting": "فارمیٹنگ",
-                    "unformatted": "غیر شکل بند",
                     "failed": "ناکام",
                     "replying": "جواب دے رہا ہے",
                     "playback": "پلے بیک",
@@ -1322,6 +1369,15 @@
             }
         },
         "switch": {
+            "timer": {
+                "name": "ٹائمر"
+            },
+            "empty_tank": {
+                "name": "ٹینک خالی کریں"
+            },
+            "fill_tank": {
+                "name": "ٹینک بھریں"
+            },
             "anti_frost": {
                 "name": "اینٹی فراسٹ"
             },
@@ -1337,6 +1393,9 @@
                     "off": "کھلا",
                     "on": "بند"
                 }
+            },
+            "camera_record": {
+                "name": "کیمرہ ریکارڈ"
             },
             "do_not_disturb": {
                 "name": "پریشان نہ کریں"
@@ -1424,6 +1483,12 @@
             },
             "snooze": {
                 "name": "سنوز"
+            },
+            "motion_detection": {
+                "name": "موشن کا پتہ لگانا"
+            },
+            "watermark": {
+                "name": "واٹر مارک"
             }
         },
         "text": {

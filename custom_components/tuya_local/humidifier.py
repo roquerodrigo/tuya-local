@@ -53,6 +53,9 @@ class TuyaLocalHumidifier(TuyaLocalEntity, HumidifierEntity):
         self._action_dp = dps_map.pop("action", None)
         self._init_end(dps_map)
 
+        if self._humidity_dp is not None:
+            self._attr_target_humidity_step = self._humidity_dp.step(device)
+
         self._support_flags = HumidifierEntityFeature(0)
         if self._mode_dp:
             self._support_flags |= HumidifierEntityFeature.MODES
@@ -99,15 +102,13 @@ class TuyaLocalHumidifier(TuyaLocalEntity, HumidifierEntity):
 
     async def async_turn_on(self, **kwargs):
         """Turn the switch on"""
-        async with self._device.set_lock:
-            _LOGGER.info("%s turning on", self._config.config_id)
-            await self._switch_dp.async_set_value(self._device, True)
+        _LOGGER.info("%s turning on", self._config.config_id)
+        await self._switch_dp.async_set_value(self._device, True)
 
     async def async_turn_off(self, **kwargs):
         """Turn the switch off"""
-        async with self._device.set_lock:
-            _LOGGER.info("%s turning off", self._config.config_id)
-            await self._switch_dp.async_set_value(self._device, False)
+        _LOGGER.info("%s turning off", self._config.config_id)
+        await self._switch_dp.async_set_value(self._device, False)
 
     @property
     def current_humidity(self):
@@ -141,9 +142,8 @@ class TuyaLocalHumidifier(TuyaLocalEntity, HumidifierEntity):
     async def async_set_humidity(self, humidity):
         if self._humidity_dp is None:
             raise NotImplementedError()
-        async with self._device.set_lock:
-            _LOGGER.info("%s setting humidity to %s", self._config.config_id, humidity)
-            await self._humidity_dp.async_set_value(self._device, humidity)
+        _LOGGER.info("%s setting humidity to %s", self._config.config_id, humidity)
+        await self._humidity_dp.async_set_value(self._device, humidity)
 
     @property
     def mode(self):
@@ -162,6 +162,5 @@ class TuyaLocalHumidifier(TuyaLocalEntity, HumidifierEntity):
         """Set the preset mode."""
         if self._mode_dp is None:
             raise NotImplementedError()
-        async with self._device.set_lock:
-            _LOGGER.info("%s setting mode to %s", self._config.config_id, mode)
-            await self._mode_dp.async_set_value(self._device, mode)
+        _LOGGER.info("%s setting mode to %s", self._config.config_id, mode)
+        await self._mode_dp.async_set_value(self._device, mode)
