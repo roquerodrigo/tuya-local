@@ -3,6 +3,9 @@ products:
   - id: tsviulglvlipwggk
     manufacturer: AVATTO
     model: Wi-Fi Smart Socket 16A
+  - id: keyjup78v54myhan
+    manufacturer: AVATTO
+    model: Wi-Fi Smart Socket 16A
 entities:
   - entity: switch
     class: outlet
