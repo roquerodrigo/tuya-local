@@ -18,7 +18,7 @@
   to check which config a given device's dps resolves to and whether two configs
   now collide.
 - `tests/test_device_config.py` enforces structural rules on every device YAML
-  (no unused/duplicate dps, valid ranges, matchable). A new device almost always
+  (schema, required dp fields, no duplicate entities, matchable). A new device almost always
   needs no new Python test — the config test covers it.
 - The `hacs-validate.yml` workflow assumes the upstream repo; per AGENTS.md it
   can be ignored when not running from `make-all/tuya-local`.
