@@ -51,12 +51,14 @@ entities:
       - id: 1
         name: hour
         type: base64
+        restore: true
         optional: true
         mask: "00FF0000000000000000000000000000000000000000000000\
                00000000000000000000000000000000000000000000000000"
       - id: 1
         name: minute
         type: base64
+        restore: true
         optional: true
         mask: "0000FF00000000000000000000000000000000000000000000\
                00000000000000000000000000000000000000000000000000"
@@ -68,6 +70,7 @@ entities:
       - id: 1
         name: value
         type: base64
+        restore: true
         optional: true
         mask: "000000FF000000000000000000000000000000000000000000\
                00000000000000000000000000000000000000000000000000"
@@ -82,6 +85,7 @@ entities:
       - id: 1
         name: switch
         type: base64
+        restore: true
         optional: true
         mask: "00000000FF0000000000000000000000000000000000000000\
                00000000000000000000000000000000000000000000000000"
@@ -93,12 +97,14 @@ entities:
       - id: 1
         name: hour
         type: base64
+        restore: true
         optional: true
         mask: "000000000000FF000000000000000000000000000000000000\
                00000000000000000000000000000000000000000000000000"
       - id: 1
         name: minute
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000FF0000000000000000000000000000000000\
                00000000000000000000000000000000000000000000000000"
@@ -110,6 +116,7 @@ entities:
       - id: 1
         name: value
         type: base64
+        restore: true
         optional: true
         mask: "0000000000000000FF00000000000000000000000000000000\
                00000000000000000000000000000000000000000000000000"
@@ -124,6 +131,7 @@ entities:
       - id: 1
         name: switch
         type: base64
+        restore: true
         optional: true
         mask: "000000000000000000FF000000000000000000000000000000\
                00000000000000000000000000000000000000000000000000"
@@ -135,12 +143,14 @@ entities:
       - id: 1
         name: hour
         type: base64
+        restore: true
         optional: true
         mask: "0000000000000000000000FF00000000000000000000000000\
                00000000000000000000000000000000000000000000000000"
       - id: 1
         name: minute
         type: base64
+        restore: true
         optional: true
         mask: "000000000000000000000000FF000000000000000000000000\
                00000000000000000000000000000000000000000000000000"
@@ -152,6 +162,7 @@ entities:
       - id: 1
         name: value
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000000000000000FF0000000000000000000000\
                00000000000000000000000000000000000000000000000000"
@@ -166,6 +177,7 @@ entities:
       - id: 1
         name: switch
         type: base64
+        restore: true
         optional: true
         mask: "0000000000000000000000000000FF00000000000000000000\
                00000000000000000000000000000000000000000000000000"
@@ -177,12 +189,14 @@ entities:
       - id: 1
         name: hour
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000000000000000000000FF0000000000000000\
                00000000000000000000000000000000000000000000000000"
       - id: 1
         name: minute
         type: base64
+        restore: true
         optional: true
         mask: "0000000000000000000000000000000000FF00000000000000\
                00000000000000000000000000000000000000000000000000"
@@ -194,6 +208,7 @@ entities:
       - id: 1
         name: value
         type: base64
+        restore: true
         optional: true
         mask: "000000000000000000000000000000000000FF000000000000\
                00000000000000000000000000000000000000000000000000"
@@ -208,6 +223,7 @@ entities:
       - id: 1
         name: switch
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000000000000000000000000000FF0000000000\
                00000000000000000000000000000000000000000000000000"
@@ -219,12 +235,14 @@ entities:
       - id: 1
         name: hour
         type: base64
+        restore: true
         optional: true
         mask: "000000000000000000000000000000000000000000FF000000\
                00000000000000000000000000000000000000000000000000"
       - id: 1
         name: minute
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000000000000000000000000000000000FF0000\
                00000000000000000000000000000000000000000000000000"
@@ -236,6 +254,7 @@ entities:
       - id: 1
         name: value
         type: base64
+        restore: true
         optional: true
         mask: "0000000000000000000000000000000000000000000000FF00\
                00000000000000000000000000000000000000000000000000"
@@ -250,6 +269,7 @@ entities:
       - id: 1
         name: switch
         type: base64
+        restore: true
         optional: true
         mask: "000000000000000000000000000000000000000000000000FF\
                00000000000000000000000000000000000000000000000000"
@@ -261,12 +281,14 @@ entities:
       - id: 1
         name: hour
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000000000000000000000000000000000000000\
                00FF0000000000000000000000000000000000000000000000"
       - id: 1
         name: minute
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000000000000000000000000000000000000000\
                0000FF00000000000000000000000000000000000000000000"
@@ -278,6 +300,7 @@ entities:
       - id: 1
         name: value
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000000000000000000000000000000000000000\
                000000FF000000000000000000000000000000000000000000"
@@ -292,6 +315,7 @@ entities:
       - id: 1
         name: switch
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000000000000000000000000000000000000000\
                00000000FF0000000000000000000000000000000000000000"
@@ -303,12 +327,14 @@ entities:
       - id: 1
         name: hour
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000000000000000000000000000000000000000\
                000000000000FF000000000000000000000000000000000000"
       - id: 1
         name: minute
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000000000000000000000000000000000000000\
                00000000000000FF0000000000000000000000000000000000"
@@ -320,6 +346,7 @@ entities:
       - id: 1
         name: value
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000000000000000000000000000000000000000\
                0000000000000000FF00000000000000000000000000000000"
@@ -334,6 +361,7 @@ entities:
       - id: 1
         name: switch
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000000000000000000000000000000000000000\
                000000000000000000FF000000000000000000000000000000"
@@ -345,12 +373,14 @@ entities:
       - id: 1
         name: hour
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000000000000000000000000000000000000000\
                0000000000000000000000FF00000000000000000000000000"
       - id: 1
         name: minute
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000000000000000000000000000000000000000\
                000000000000000000000000FF000000000000000000000000"
@@ -362,6 +392,7 @@ entities:
       - id: 1
         name: value
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000000000000000000000000000000000000000\
                00000000000000000000000000FF0000000000000000000000"
@@ -376,6 +407,7 @@ entities:
       - id: 1
         name: switch
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000000000000000000000000000000000000000\
                0000000000000000000000000000FF00000000000000000000"
@@ -387,12 +419,14 @@ entities:
       - id: 1
         name: hour
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000000000000000000000000000000000000000\
                00000000000000000000000000000000FF0000000000000000"
       - id: 1
         name: minute
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000000000000000000000000000000000000000\
                0000000000000000000000000000000000FF00000000000000"
@@ -404,6 +438,7 @@ entities:
       - id: 1
         name: value
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000000000000000000000000000000000000000\
                000000000000000000000000000000000000FF000000000000"
@@ -418,6 +453,7 @@ entities:
       - id: 1
         name: switch
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000000000000000000000000000000000000000\
                00000000000000000000000000000000000000FF0000000000"
@@ -429,12 +465,14 @@ entities:
       - id: 1
         name: hour
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000000000000000000000000000000000000000\
                000000000000000000000000000000000000000000FF000000"
       - id: 1
         name: minute
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000000000000000000000000000000000000000\
                00000000000000000000000000000000000000000000FF0000"
@@ -446,6 +484,7 @@ entities:
       - id: 1
         name: value
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000000000000000000000000000000000000000\
                0000000000000000000000000000000000000000000000FF00"
@@ -460,6 +499,7 @@ entities:
       - id: 1
         name: switch
         type: base64
+        restore: true
         optional: true
         mask: "00000000000000000000000000000000000000000000000000\
                000000000000000000000000000000000000000000000000FF"
