@@ -10,6 +10,7 @@ from homeassistant.exceptions import ConfigEntryNotReady
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.tuya_local import (
+    async_remove_entry,
     async_setup_entry,
     async_unload_entry,
     async_update_entry,
@@ -98,6 +99,7 @@ async def test_async_setup_entry_cleans_up_failed_device(hass, mocker, refresh_e
     """Failed runtime setup should not leave stale device state cached."""
 
     mock_device = mocker.MagicMock()
+    mock_device.async_load_restored_state = mocker.AsyncMock()
     if refresh_error is None:
         mock_device.async_refresh = mocker.AsyncMock()
         mock_device.has_returned_state = False
@@ -162,6 +164,36 @@ async def test_async_unload_entry_ignores_missing_device_data(hass):
     )
 
     assert await async_unload_entry(hass, entry)
+
+
+@pytest.mark.asyncio
+async def test_async_remove_entry_deletes_restored_state(hass, hass_storage):
+    """Removing an entry should delete the dps stored for restoring."""
+    hass_storage["tuya_local.restored_state.deviceid"] = {
+        "version": 1,
+        "minor_version": 1,
+        "key": "tuya_local.restored_state.deviceid",
+        "data": {"1": "STORED"},
+    }
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        version=13,
+        minor_version=18,
+        title="test",
+        data={
+            CONF_DEVICE_ID: "deviceid",
+            CONF_HOST: "hostname",
+            CONF_LOCAL_KEY: TESTKEY,
+            CONF_POLL_ONLY: False,
+            CONF_PROTOCOL_VERSION: 3.4,
+            CONF_TYPE: "rgbcw_lightbulb",
+        },
+        options={},
+    )
+
+    await async_remove_entry(hass, entry)
+
+    assert "tuya_local.restored_state.deviceid" not in hass_storage
 
 
 @pytest.mark.asyncio

@@ -6,7 +6,11 @@ import pytest
 
 # from homeassistant.const import EVENT_HOMEASSISTANT_STARTED, EVENT_HOMEASSISTANT_STOP
 from custom_components.tuya_local.const import CONF_DEVICE_ID, DOMAIN
-from custom_components.tuya_local.device import TuyaLocalDevice, async_delete_device
+from custom_components.tuya_local.device import (
+    TuyaLocalDevice,
+    async_delete_device,
+    restored_state_storage_key,
+)
 
 from .const import EUROM_600_HEATER_PAYLOAD
 
@@ -756,3 +760,120 @@ async def test_refresh_error_914_stays_quiet_when_rotating_protocols(
         await subject.async_refresh()
 
     assert caplog.text == ""
+
+
+def _entity_with_restorable_dp(mocker, dp_id):
+    dp = mocker.MagicMock()
+    dp.id = dp_id
+    dp.force = False
+    dp.restore = True
+    entity = mocker.AsyncMock()
+    entity._config = mocker.MagicMock()
+    entity._config.dps.return_value = [dp]
+    entity.async_schedule_update_ha_state = mocker.MagicMock()
+    entity.schedule_update_ha_state = mocker.MagicMock()
+    return entity
+
+
+def test_restored_state_storage_key_includes_sub_device():
+    assert restored_state_storage_key("gateway") == "tuya_local.restored_state.gateway"
+    assert (
+        restored_state_storage_key("gateway", "child")
+        == "tuya_local.restored_state.gateway.child"
+    )
+
+
+def test_register_entity_tracks_restorable_dps(subject, mocker):
+    subject.start = mocker.MagicMock()
+
+    subject.register_entity(_entity_with_restorable_dp(mocker, "1"))
+
+    assert subject._restorable_dps == {"1"}
+
+
+def test_restored_value_used_when_device_has_not_sent_it(subject, mocker):
+    subject.start = mocker.MagicMock()
+    subject.register_entity(_entity_with_restorable_dp(mocker, "1"))
+    subject._restored_state = {"1": "STORED", "2": "IGNORED"}
+
+    assert subject.get_property("1") == "STORED"
+    assert subject.get_property("2") is None
+    assert not subject.has_returned_state
+
+
+def test_live_value_overrides_restored_value(subject, mocker):
+    subject.start = mocker.MagicMock()
+    subject.register_entity(_entity_with_restorable_dp(mocker, "1"))
+    subject._restored_state = {"1": "STORED"}
+    subject._cached_state = {"1": "LIVE", "updated_at": time()}
+
+    assert subject.get_property("1") == "LIVE"
+
+
+async def test_received_restorable_value_is_saved(subject, mocker):
+    subject.start = mocker.MagicMock()
+    subject.register_entity(_entity_with_restorable_dp(mocker, "1"))
+    save = mocker.patch.object(subject._restored_state_store, "async_delay_save")
+
+    subject._remember_restorable_values({"1": "NEW", "4": "standby"})
+    await asyncio.sleep(0)
+
+    assert subject._restored_state == {"1": "NEW"}
+    save.assert_called_once()
+    assert save.call_args.args[0]() == {"1": "NEW"}
+
+
+async def test_unchanged_restorable_value_is_not_saved_again(subject, mocker):
+    subject.start = mocker.MagicMock()
+    subject.register_entity(_entity_with_restorable_dp(mocker, "1"))
+    subject._restored_state = {"1": "SAME"}
+    save = mocker.patch.object(subject._restored_state_store, "async_delay_save")
+
+    subject._remember_restorable_values({"1": "SAME"})
+    await asyncio.sleep(0)
+
+    save.assert_not_called()
+
+
+def test_refresh_remembers_restorable_values(subject, mock_api, mocker):
+    subject.start = mocker.MagicMock()
+    subject.register_entity(_entity_with_restorable_dp(mocker, "1"))
+    mock_api().status.return_value = {"dps": {"1": "POLLED"}}
+
+    subject._refresh_cached_state()
+
+    assert subject._restored_state == {"1": "POLLED"}
+
+
+def test_restored_value_survives_cache_reset(subject, mocker):
+    subject.start = mocker.MagicMock()
+    subject.register_entity(_entity_with_restorable_dp(mocker, "1"))
+    subject._remember_restorable_values({"1": "KEPT"})
+
+    subject._reset_cached_state()
+
+    assert subject.get_property("1") == "KEPT"
+
+
+async def test_load_restored_state(subject, mocker):
+    mocker.patch.object(
+        subject._restored_state_store,
+        "async_load",
+        mocker.AsyncMock(return_value={"1": "STORED"}),
+    )
+
+    await subject.async_load_restored_state()
+
+    assert subject._restored_state == {"1": "STORED"}
+
+
+async def test_load_restored_state_without_stored_data(subject, mocker):
+    mocker.patch.object(
+        subject._restored_state_store,
+        "async_load",
+        mocker.AsyncMock(return_value=None),
+    )
+
+    await subject.async_load_restored_state()
+
+    assert subject._restored_state == {}

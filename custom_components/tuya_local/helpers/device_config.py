@@ -439,6 +439,10 @@ class TuyaDpsConfig:
         return self._config.get("persist", True)
 
     @property
+    def restore(self):
+        return self._config.get("restore", False)
+
+    @property
     def force(self):
         return self._config.get("force", False)
 

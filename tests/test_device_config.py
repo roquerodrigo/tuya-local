@@ -114,6 +114,7 @@ DP_SCHEMA = vol.Schema(
         ),
         vol.Optional("optional"): True,
         vol.Optional("persist"): False,
+        vol.Optional("restore"): True,
         vol.Optional("hidden"): True,
         vol.Optional("readonly"): True,
         vol.Optional("sensitive"): True,

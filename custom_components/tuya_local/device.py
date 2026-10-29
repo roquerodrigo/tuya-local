@@ -16,6 +16,7 @@ from homeassistant.const import (
     EVENT_HOMEASSISTANT_STOP,
 )
 from homeassistant.core import HomeAssistant, callback
+from homeassistant.helpers.storage import Store
 
 from .const import (
     API_PROTOCOL_VERSIONS,
@@ -41,6 +42,15 @@ _LOGGER = logging.getLogger(__name__)
 _ERROR_HINTS = {
     "914": "  If previously running OK, likely the device needs to be power cycled.",
 }
+
+RESTORED_STATE_STORAGE_VERSION = 1
+RESTORED_STATE_SAVE_DELAY = 1
+
+
+def restored_state_storage_key(dev_id, dev_cid=None):
+    """Return the storage key holding the restorable dps of a device."""
+    device_key = f"{dev_id}.{dev_cid}" if dev_cid else dev_id
+    return f"{DOMAIN}.restored_state.{device_key}"
 
 
 def _collect_possible_matches(cached_state, product_ids):
@@ -148,6 +158,13 @@ class TuyaLocalDevice(object):
         self._reset_cached_state()
 
         self._hass = hass
+        self._restorable_dps = set()
+        self._restored_state = {}
+        self._restored_state_store = Store(
+            hass,
+            RESTORED_STATE_STORAGE_VERSION,
+            restored_state_storage_key(dev_id, dev_cid),
+        )
 
         # API calls to update Tuya devices are asynchronous and non-blocking.
         # This means you can send a change and immediately request an updated
@@ -195,8 +212,8 @@ class TuyaLocalDevice(object):
     @property
     def has_returned_state(self):
         """Return True if the device has returned some state."""
-        cached = self._get_cached_state()
-        return len(cached) > 1 or cached.get("updated_at", 0) > 0
+        live_state = self._get_live_state()
+        return len(live_state) > 1 or live_state.get("updated_at", 0) > 0
 
     @callback
     def actually_start(self, event=None):
@@ -244,6 +261,8 @@ class TuyaLocalDevice(object):
         for dp in entity._config.dps():
             if dp.force and dp.id not in self._force_dps:
                 self._force_dps.append(int(dp.id))
+            if dp.restore:
+                self._restorable_dps.add(dp.id)
 
         if not self._running and not self._startup_listener:
             self.start()
@@ -273,6 +292,7 @@ class TuyaLocalDevice(object):
                     full_poll = poll.pop("full_poll", False)
                     self._cached_state = self._cached_state | poll
                     self._cached_state["updated_at"] = time()
+                    self._remember_restorable_values(poll)
                     self._remove_properties_from_pending_updates(poll)
 
                     for entity in self._children:
@@ -571,6 +591,7 @@ class TuyaLocalDevice(object):
             if "Err" not in new_state:
                 self._cached_state = self._cached_state | new_state.get("dps", {})
                 self._cached_state["updated_at"] = time()
+                self._remember_restorable_values(new_state.get("dps", {}))
                 for entity in self._children:
                     for dp in entity._config.dps():
                         # Clear non-persistant dps that were not in the poll
@@ -757,9 +778,43 @@ class TuyaLocalDevice(object):
                 if not self._api_protocol_working:
                     await self._rotate_api_protocol_version()
 
-    def _get_cached_state(self):
+    async def async_load_restored_state(self):
+        """Load the restorable dps stored by a previous run."""
+        stored_state = await self._restored_state_store.async_load()
+        if isinstance(stored_state, dict):
+            self._restored_state = stored_state
+
+    def _remember_restorable_values(self, dps):
+        changed_values = {
+            dp_id: value
+            for dp_id, value in dps.items()
+            if dp_id in self._restorable_dps
+            and self._restored_state.get(dp_id) != value
+        }
+        if not changed_values:
+            return
+        self._restored_state = self._restored_state | changed_values
+        self._hass.loop.call_soon_threadsafe(self._schedule_restored_state_save)
+
+    @callback
+    def _schedule_restored_state_save(self):
+        self._restored_state_store.async_delay_save(
+            lambda: dict(self._restored_state), RESTORED_STATE_SAVE_DELAY
+        )
+
+    def _get_restored_state(self):
+        return {
+            dp_id: value
+            for dp_id, value in self._restored_state.items()
+            if dp_id in self._restorable_dps
+        }
+
+    def _get_live_state(self):
         cached_state = self._cached_state.copy()
         return {**cached_state, **self._get_pending_properties()}
+
+    def _get_cached_state(self):
+        return {**self._get_restored_state(), **self._get_live_state()}
 
     def _get_pending_properties(self):
         return {key: prop["value"] for key, prop in self._get_pending_updates().items()}
