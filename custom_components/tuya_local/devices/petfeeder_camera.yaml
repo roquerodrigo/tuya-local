@@ -43,3 +43,423 @@ entities:
       - id: 19
         name: sensor
         type: bitfield
+  - entity: time
+    name: Refeição 1
+    icon: "mdi:clock-outline"
+    category: config
+    dps:
+      - id: 1
+        name: hour
+        type: base64
+        optional: true
+        mask: "00FF0000000000000000000000000000000000000000000000\
+               00000000000000000000000000000000000000000000000000"
+      - id: 1
+        name: minute
+        type: base64
+        optional: true
+        mask: "0000FF00000000000000000000000000000000000000000000\
+               00000000000000000000000000000000000000000000000000"
+  - entity: number
+    name: Refeição 1 porções
+    icon: "mdi:food-drumstick"
+    category: config
+    dps:
+      - id: 1
+        name: value
+        type: base64
+        optional: true
+        mask: "000000FF000000000000000000000000000000000000000000\
+               00000000000000000000000000000000000000000000000000"
+        range:
+          min: 1
+          max: 12
+  - entity: switch
+    name: Refeição 1 ativa
+    icon: "mdi:calendar-check"
+    category: config
+    dps:
+      - id: 1
+        name: switch
+        type: base64
+        optional: true
+        mask: "00000000FF0000000000000000000000000000000000000000\
+               00000000000000000000000000000000000000000000000000"
+  - entity: time
+    name: Refeição 2
+    icon: "mdi:clock-outline"
+    category: config
+    dps:
+      - id: 1
+        name: hour
+        type: base64
+        optional: true
+        mask: "000000000000FF000000000000000000000000000000000000\
+               00000000000000000000000000000000000000000000000000"
+      - id: 1
+        name: minute
+        type: base64
+        optional: true
+        mask: "00000000000000FF0000000000000000000000000000000000\
+               00000000000000000000000000000000000000000000000000"
+  - entity: number
+    name: Refeição 2 porções
+    icon: "mdi:food-drumstick"
+    category: config
+    dps:
+      - id: 1
+        name: value
+        type: base64
+        optional: true
+        mask: "0000000000000000FF00000000000000000000000000000000\
+               00000000000000000000000000000000000000000000000000"
+        range:
+          min: 1
+          max: 12
+  - entity: switch
+    name: Refeição 2 ativa
+    icon: "mdi:calendar-check"
+    category: config
+    dps:
+      - id: 1
+        name: switch
+        type: base64
+        optional: true
+        mask: "000000000000000000FF000000000000000000000000000000\
+               00000000000000000000000000000000000000000000000000"
+  - entity: time
+    name: Refeição 3
+    icon: "mdi:clock-outline"
+    category: config
+    dps:
+      - id: 1
+        name: hour
+        type: base64
+        optional: true
+        mask: "0000000000000000000000FF00000000000000000000000000\
+               00000000000000000000000000000000000000000000000000"
+      - id: 1
+        name: minute
+        type: base64
+        optional: true
+        mask: "000000000000000000000000FF000000000000000000000000\
+               00000000000000000000000000000000000000000000000000"
+  - entity: number
+    name: Refeição 3 porções
+    icon: "mdi:food-drumstick"
+    category: config
+    dps:
+      - id: 1
+        name: value
+        type: base64
+        optional: true
+        mask: "00000000000000000000000000FF0000000000000000000000\
+               00000000000000000000000000000000000000000000000000"
+        range:
+          min: 1
+          max: 12
+  - entity: switch
+    name: Refeição 3 ativa
+    icon: "mdi:calendar-check"
+    category: config
+    dps:
+      - id: 1
+        name: switch
+        type: base64
+        optional: true
+        mask: "0000000000000000000000000000FF00000000000000000000\
+               00000000000000000000000000000000000000000000000000"
+  - entity: time
+    name: Refeição 4
+    icon: "mdi:clock-outline"
+    category: config
+    dps:
+      - id: 1
+        name: hour
+        type: base64
+        optional: true
+        mask: "00000000000000000000000000000000FF0000000000000000\
+               00000000000000000000000000000000000000000000000000"
+      - id: 1
+        name: minute
+        type: base64
+        optional: true
+        mask: "0000000000000000000000000000000000FF00000000000000\
+               00000000000000000000000000000000000000000000000000"
+  - entity: number
+    name: Refeição 4 porções
+    icon: "mdi:food-drumstick"
+    category: config
+    dps:
+      - id: 1
+        name: value
+        type: base64
+        optional: true
+        mask: "000000000000000000000000000000000000FF000000000000\
+               00000000000000000000000000000000000000000000000000"
+        range:
+          min: 1
+          max: 12
+  - entity: switch
+    name: Refeição 4 ativa
+    icon: "mdi:calendar-check"
+    category: config
+    dps:
+      - id: 1
+        name: switch
+        type: base64
+        optional: true
+        mask: "00000000000000000000000000000000000000FF0000000000\
+               00000000000000000000000000000000000000000000000000"
+  - entity: time
+    name: Refeição 5
+    icon: "mdi:clock-outline"
+    category: config
+    dps:
+      - id: 1
+        name: hour
+        type: base64
+        optional: true
+        mask: "000000000000000000000000000000000000000000FF000000\
+               00000000000000000000000000000000000000000000000000"
+      - id: 1
+        name: minute
+        type: base64
+        optional: true
+        mask: "00000000000000000000000000000000000000000000FF0000\
+               00000000000000000000000000000000000000000000000000"
+  - entity: number
+    name: Refeição 5 porções
+    icon: "mdi:food-drumstick"
+    category: config
+    dps:
+      - id: 1
+        name: value
+        type: base64
+        optional: true
+        mask: "0000000000000000000000000000000000000000000000FF00\
+               00000000000000000000000000000000000000000000000000"
+        range:
+          min: 1
+          max: 12
+  - entity: switch
+    name: Refeição 5 ativa
+    icon: "mdi:calendar-check"
+    category: config
+    dps:
+      - id: 1
+        name: switch
+        type: base64
+        optional: true
+        mask: "000000000000000000000000000000000000000000000000FF\
+               00000000000000000000000000000000000000000000000000"
+  - entity: time
+    name: Refeição 6
+    icon: "mdi:clock-outline"
+    category: config
+    dps:
+      - id: 1
+        name: hour
+        type: base64
+        optional: true
+        mask: "00000000000000000000000000000000000000000000000000\
+               00FF0000000000000000000000000000000000000000000000"
+      - id: 1
+        name: minute
+        type: base64
+        optional: true
+        mask: "00000000000000000000000000000000000000000000000000\
+               0000FF00000000000000000000000000000000000000000000"
+  - entity: number
+    name: Refeição 6 porções
+    icon: "mdi:food-drumstick"
+    category: config
+    dps:
+      - id: 1
+        name: value
+        type: base64
+        optional: true
+        mask: "00000000000000000000000000000000000000000000000000\
+               000000FF000000000000000000000000000000000000000000"
+        range:
+          min: 1
+          max: 12
+  - entity: switch
+    name: Refeição 6 ativa
+    icon: "mdi:calendar-check"
+    category: config
+    dps:
+      - id: 1
+        name: switch
+        type: base64
+        optional: true
+        mask: "00000000000000000000000000000000000000000000000000\
+               00000000FF0000000000000000000000000000000000000000"
+  - entity: time
+    name: Refeição 7
+    icon: "mdi:clock-outline"
+    category: config
+    dps:
+      - id: 1
+        name: hour
+        type: base64
+        optional: true
+        mask: "00000000000000000000000000000000000000000000000000\
+               000000000000FF000000000000000000000000000000000000"
+      - id: 1
+        name: minute
+        type: base64
+        optional: true
+        mask: "00000000000000000000000000000000000000000000000000\
+               00000000000000FF0000000000000000000000000000000000"
+  - entity: number
+    name: Refeição 7 porções
+    icon: "mdi:food-drumstick"
+    category: config
+    dps:
+      - id: 1
+        name: value
+        type: base64
+        optional: true
+        mask: "00000000000000000000000000000000000000000000000000\
+               0000000000000000FF00000000000000000000000000000000"
+        range:
+          min: 1
+          max: 12
+  - entity: switch
+    name: Refeição 7 ativa
+    icon: "mdi:calendar-check"
+    category: config
+    dps:
+      - id: 1
+        name: switch
+        type: base64
+        optional: true
+        mask: "00000000000000000000000000000000000000000000000000\
+               000000000000000000FF000000000000000000000000000000"
+  - entity: time
+    name: Refeição 8
+    icon: "mdi:clock-outline"
+    category: config
+    dps:
+      - id: 1
+        name: hour
+        type: base64
+        optional: true
+        mask: "00000000000000000000000000000000000000000000000000\
+               0000000000000000000000FF00000000000000000000000000"
+      - id: 1
+        name: minute
+        type: base64
+        optional: true
+        mask: "00000000000000000000000000000000000000000000000000\
+               000000000000000000000000FF000000000000000000000000"
+  - entity: number
+    name: Refeição 8 porções
+    icon: "mdi:food-drumstick"
+    category: config
+    dps:
+      - id: 1
+        name: value
+        type: base64
+        optional: true
+        mask: "00000000000000000000000000000000000000000000000000\
+               00000000000000000000000000FF0000000000000000000000"
+        range:
+          min: 1
+          max: 12
+  - entity: switch
+    name: Refeição 8 ativa
+    icon: "mdi:calendar-check"
+    category: config
+    dps:
+      - id: 1
+        name: switch
+        type: base64
+        optional: true
+        mask: "00000000000000000000000000000000000000000000000000\
+               0000000000000000000000000000FF00000000000000000000"
+  - entity: time
+    name: Refeição 9
+    icon: "mdi:clock-outline"
+    category: config
+    dps:
+      - id: 1
+        name: hour
+        type: base64
+        optional: true
+        mask: "00000000000000000000000000000000000000000000000000\
+               00000000000000000000000000000000FF0000000000000000"
+      - id: 1
+        name: minute
+        type: base64
+        optional: true
+        mask: "00000000000000000000000000000000000000000000000000\
+               0000000000000000000000000000000000FF00000000000000"
+  - entity: number
+    name: Refeição 9 porções
+    icon: "mdi:food-drumstick"
+    category: config
+    dps:
+      - id: 1
+        name: value
+        type: base64
+        optional: true
+        mask: "00000000000000000000000000000000000000000000000000\
+               000000000000000000000000000000000000FF000000000000"
+        range:
+          min: 1
+          max: 12
+  - entity: switch
+    name: Refeição 9 ativa
+    icon: "mdi:calendar-check"
+    category: config
+    dps:
+      - id: 1
+        name: switch
+        type: base64
+        optional: true
+        mask: "00000000000000000000000000000000000000000000000000\
+               00000000000000000000000000000000000000FF0000000000"
+  - entity: time
+    name: Refeição 10
+    icon: "mdi:clock-outline"
+    category: config
+    dps:
+      - id: 1
+        name: hour
+        type: base64
+        optional: true
+        mask: "00000000000000000000000000000000000000000000000000\
+               000000000000000000000000000000000000000000FF000000"
+      - id: 1
+        name: minute
+        type: base64
+        optional: true
+        mask: "00000000000000000000000000000000000000000000000000\
+               00000000000000000000000000000000000000000000FF0000"
+  - entity: number
+    name: Refeição 10 porções
+    icon: "mdi:food-drumstick"
+    category: config
+    dps:
+      - id: 1
+        name: value
+        type: base64
+        optional: true
+        mask: "00000000000000000000000000000000000000000000000000\
+               0000000000000000000000000000000000000000000000FF00"
+        range:
+          min: 1
+          max: 12
+  - entity: switch
+    name: Refeição 10 ativa
+    icon: "mdi:calendar-check"
+    category: config
+    dps:
+      - id: 1
+        name: switch
+        type: base64
+        optional: true
+        mask: "00000000000000000000000000000000000000000000000000\
+               000000000000000000000000000000000000000000000000FF"
