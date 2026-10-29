@@ -209,6 +209,17 @@ dp is used to signal an event, so when it is next sent, it should trigger
 automations even if it is the same value as previously sent. In that case
 the value needs to go to null in between when the device is not sending it.
 
+### `restore`
+
+*Optional, default false.*
+
+Whether to store the last value received for this dp, and use it after a
+restart or reconnection until the device sends the dp again. Some devices
+never return certain dps in status polls, only when they change (for example
+the meal plan of some pet feeders). Without this, such dps stay unknown after
+every restart or reconnection, and masked entities built on them cannot be
+changed.
+
 ### `force`
 
 *Optional, default false.*

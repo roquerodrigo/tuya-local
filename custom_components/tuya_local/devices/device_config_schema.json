@@ -178,6 +178,10 @@
                                     "type": "boolean",
                                     "description": "false to clear the last known value of this dp before each full poll. Only needed for dps that are expected to disappear (become null), but not required to be specified for events as they are automatically only fired when explicitly received. Default is true, which should not be specified explicitly to avoid clutter."
                                 },
+                                "restore": {
+                                    "type": "boolean",
+                                    "description": "true to store the last value received for this dp and use it after a restart or reconnection, until the device sends it again. Only needed for dps the device never returns in status polls, only when they change. Default is false, which should not be specified explicitly to avoid clutter."
+                                },
                                 "format": {
                                     "type": "array",
                                     "description": "The format to extract multiple numeric fields from base64 or hex DP values. Used only for rgbhsv fields of lights currently.",

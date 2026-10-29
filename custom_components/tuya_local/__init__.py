@@ -16,6 +16,7 @@ from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.device_registry import async_get as async_get_device_registry
 from homeassistant.helpers.entity_registry import async_get as async_get_entity_registry
 from homeassistant.helpers.entity_registry import async_migrate_entries
+from homeassistant.helpers.storage import Store
 from homeassistant.util import slugify
 
 from .const import (
@@ -27,7 +28,13 @@ from .const import (
     CONF_TYPE,
     DOMAIN,
 )
-from .device import async_delete_device, get_device_id, setup_device
+from .device import (
+    RESTORED_STATE_STORAGE_VERSION,
+    async_delete_device,
+    get_device_id,
+    restored_state_storage_key,
+    setup_device,
+)
 from .discovery import async_start_discovery, async_stop_discovery
 from .helpers.device_config import get_config
 from .services import async_setup_services
@@ -1070,6 +1077,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     config = {**entry.data, **entry.options, "name": entry.title}
     try:
         device = await hass.async_add_executor_job(setup_device, hass, config)
+        await device.async_load_restored_state()
         await device.async_refresh()
 
     except Exception as e:
@@ -1139,6 +1147,17 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
         async_stop_discovery(hass)
 
     return True
+
+
+async def async_remove_entry(hass: HomeAssistant, entry: ConfigEntry):
+    _LOGGER.debug("Removing entry for device: %s", get_device_id(entry.data))
+    await Store(
+        hass,
+        RESTORED_STATE_STORAGE_VERSION,
+        restored_state_storage_key(
+            entry.data[CONF_DEVICE_ID], entry.data.get(CONF_DEVICE_CID)
+        ),
+    ).async_remove()
 
 
 async def async_update_entry(hass: HomeAssistant, entry: ConfigEntry):
